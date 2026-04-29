@@ -1,0 +1,2 @@
+# fastmcp
+fastmcp server
