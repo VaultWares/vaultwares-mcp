@@ -1,0 +1,41 @@
+name: research
+description: >
+  Research a topic by fetching and synthesising information from multiple web
+  sources. Use for market research, technology comparisons, fact-finding,
+  literature reviews, or any task requiring up-to-date information from the web.
+
+mcp_server: vaultwares-mcp
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Research workflow:
+
+  1. Identify 5–10 authoritative URLs relevant to the query.
+     Prefer: official docs, peer-reviewed sources, reputable news sites.
+
+  2. Fetch all URLs in one call:
+     Call `nav_fetch_many` with the URL list.
+     This completes all fetches in ~1.3 s (vs. 150+ s with browser tools).
+
+  3. Synthesise the results:
+     - Extract the key facts, figures, and dates from each source
+     - Identify agreements and contradictions between sources
+     - Discard sources that failed (error != null in results)
+
+  4. Write the research summary:
+     ## Summary
+     2–3 sentence TL;DR
+
+     ## Key Findings
+     Bullet list of the most important facts, each with a source citation [N]
+
+     ## Sources
+     Numbered list of URLs used
+
+  5. Model tier:
+     - Quick fact lookup (1–3 URLs)           → standard
+     - Standard research (4–10 URLs)          → standard
+     - Comprehensive / exhaustive report      → max
+
+  Always cite sources. Never assert facts that don't appear in the fetched content.

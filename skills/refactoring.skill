@@ -1,0 +1,38 @@
+name: refactoring
+description: >
+  Refactor existing code to improve readability, reduce duplication, and
+  follow best practices without changing observable behaviour. Use when a
+  user submits messy, overly complex, or outdated code and wants it cleaned up.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Refactoring workflow:
+
+  1. Understand the intent of the code before changing anything.
+     If the code's purpose is unclear, ask before refactoring.
+
+  2. Identify refactoring opportunities:
+     - Long functions (> 30 lines) → extract sub-functions
+     - Duplicated blocks           → extract shared helper
+     - Magic numbers/strings       → name as constants
+     - Nested conditionals > 3     → invert / early-return / table-lookup
+     - Mutable global state        → encapsulate or pass as parameter
+     - Commented-out code          → delete it (it's in version control)
+
+  3. Apply changes incrementally:
+     - One refactoring type at a time
+     - Ensure tests still pass after each change (or note if tests are absent)
+
+  4. Output format:
+     - Show the refactored code in a fenced block
+     - Add a bullet list of what was changed and why
+
+  5. Do NOT:
+     - Change the external API / function signatures unless asked
+     - Add new features during refactoring
+     - Rewrite in a different language
+
+  Model tier: standard for most refactors; max for large codebases
+  or architectural changes.

@@ -1,0 +1,41 @@
+name: test-generation
+description: >
+  Generate comprehensive unit tests, integration tests, or end-to-end tests
+  for existing code. Use when a user wants test coverage added to a function,
+  module, class, or API endpoint.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Test generation workflow:
+
+  1. Identify the testing framework in use:
+     Python   → pytest (preferred) or unittest
+     JS/TS    → Jest or Vitest
+     Go       → testing package
+     Java     → JUnit 5
+     If none is specified, default to the ecosystem standard above.
+
+  2. Cover these case types for every function:
+     - Happy path    — valid input, expected output
+     - Edge case     — empty, zero, null, boundary values
+     - Error case    — invalid input, should raise/reject
+     - State change  — verify side effects (DB write, file created, etc.)
+
+  3. Follow AAA structure:
+     Arrange → set up data
+     Act     → call the function
+     Assert  → verify outcome
+
+  4. Name tests descriptively:
+     test_<function>_<scenario>_<expected_outcome>
+     Example: test_recommend_model_complex_prompt_returns_max
+
+  5. Mock external dependencies (network, DB, file I/O) using the
+     framework's standard mock library.
+
+  6. Output: runnable test file with all imports.
+     Do not include implementation code in the test file.
+
+  Model tier: standard for unit tests; max for integration test suites.

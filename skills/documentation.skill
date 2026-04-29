@@ -1,0 +1,42 @@
+name: documentation
+description: >
+  Write or improve technical documentation including README files, API
+  references, docstrings, inline comments, and user guides. Use when a user
+  wants documentation generated from code, or existing docs improved.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Documentation workflow:
+
+  From code → docs:
+    1. Read the code to infer purpose, inputs, outputs, side effects.
+    2. Write:
+       - Module-level docstring: one sentence purpose + usage example
+       - Function/method docstring: Args, Returns, Raises sections
+       - Inline comments for non-obvious logic only
+
+  From request → README:
+    Required sections in order:
+      # Project Name — one-line tagline
+      ## Features   — bullet list
+      ## Installation — commands
+      ## Usage       — code examples
+      ## API / Tools — table of functions/endpoints
+      ## Contributing — one paragraph
+      ## License
+
+  API reference:
+    For each endpoint / function:
+      Name, HTTP method & path (if API), parameters table,
+      return schema, example request + response.
+
+  Style rules:
+    - Use second person ("You can…") for user guides
+    - Use imperative ("Install…", "Run…") for instructions
+    - Keep sentences under 20 words
+    - No marketing language in technical docs
+
+  Model tier: standard for docstrings and short READMEs;
+  max for full API references or multi-section user guides.

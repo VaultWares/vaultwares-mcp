@@ -1,0 +1,31 @@
+name: credit-classify
+description: >
+  Classify the intent of any user prompt into one of 12 categories before
+  executing it. Use to understand what type of task is being requested so
+  the correct workflow, model, and tools can be selected.
+
+mcp_server: vaultwares-mcp
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Call `credit_classify` with the user prompt.
+
+  Returns one of 12 intent categories:
+    code          — Write, generate, or scaffold code
+    bug_fix       — Fix a bug, error, or crash
+    refactor      — Clean up or restructure existing code
+    data          — Analyse, parse, or transform data/CSV/JSON/SQL
+    research      — Search, look up, summarise, or compare information
+    translation   — Translate text between languages
+    creative      — Write blog posts, stories, marketing copy
+    documentation — Write or improve technical documentation
+    analysis      — Review, audit, or evaluate content
+    brainstorm    — Generate ideas, suggestions, or alternatives
+    qa            — Simple factual questions
+    mixed         — Multiple intents in one prompt
+
+  Use the returned intent to:
+    - Select the appropriate model tier (see credit-recommend skill)
+    - Decide whether to break a "mixed" prompt into sub-tasks
+    - Apply domain-specific workflows (see code-generation, research skills)

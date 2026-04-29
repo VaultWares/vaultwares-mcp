@@ -1,0 +1,56 @@
+name: pdf-processing
+description: >
+  Extract text, tables, and metadata from PDF files; split, merge, or convert
+  PDFs; and generate PDFs from HTML or Markdown. Use for document parsing,
+  report generation, or any PDF manipulation task.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  PDF processing workflow (Python):
+
+  Extract text:
+    # Fast, pure-Python
+    import pypdf
+    reader = pypdf.PdfReader("file.pdf")
+    text = "\n".join(page.extract_text() for page in reader.pages)
+
+  Extract tables (preferred when tables are present):
+    import pdfplumber
+    with pdfplumber.open("file.pdf") as pdf:
+        for page in pdf.pages:
+            tables = page.extract_tables()
+            for table in tables:
+                print(table)
+
+  Merge PDFs:
+    from pypdf import PdfMerger
+    merger = PdfMerger()
+    for f in ["a.pdf", "b.pdf"]:
+        merger.append(f)
+    merger.write("merged.pdf")
+
+  Split PDF (extract pages 2–5):
+    writer = pypdf.PdfWriter()
+    for page in reader.pages[1:5]:
+        writer.add_page(page)
+    with open("split.pdf", "wb") as f:
+        writer.write(f)
+
+  HTML → PDF:
+    from weasyprint import HTML
+    HTML("template.html").write_pdf("output.pdf")
+
+  OCR (scanned PDFs):
+    Install: pip install pytesseract pdf2image
+    from pdf2image import convert_from_path
+    images = convert_from_path("scan.pdf")
+    text = pytesseract.image_to_string(images[0])
+
+  Fallback for complex layouts:
+    Use pdfplumber.open().pages[n].extract_text(layout=True)
+    to preserve spatial layout.
+
+  Model tier: standard for extraction; max for complex table parsing
+  or multi-document processing.

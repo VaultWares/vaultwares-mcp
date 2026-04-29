@@ -1,0 +1,44 @@
+name: web-scraping
+description: >
+  Extract structured data from web pages. Use for scraping product prices,
+  news headlines, job listings, financial data, or any other structured
+  content from websites.
+
+mcp_server: vaultwares-mcp
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Web scraping workflow:
+
+  1. Fetch the target page(s):
+     Call `nav_fetch` (single URL) or `nav_fetch_many` (batch).
+     Set as_text=false to receive raw HTML for parsing.
+     Set as_text=true if plain text is sufficient.
+
+  2. Parse the content:
+     HTML parsing (Python):
+       from selectolax.parser import HTMLParser
+       parser = HTMLParser(html)
+       items = parser.css("div.product-card")
+
+     JSON APIs (preferred when available):
+       Check for XHR requests in the page — APIs are more stable than HTML.
+
+  3. Extract structured data:
+     Build a list of dicts with consistent keys.
+     Handle missing fields with None rather than crashing.
+
+  4. Clean the data:
+     - Strip whitespace: text.strip()
+     - Normalise prices: remove currency symbols, convert to float
+     - Normalise dates: convert to ISO 8601 (YYYY-MM-DD)
+
+  5. Output format (default):
+     JSON array of objects, one per scraped item.
+
+  Rate limiting:
+     Add a 1-second delay between page fetches for paginated scrapes
+     to avoid triggering anti-bot measures.
+
+  Do not scrape sites whose robots.txt or ToS prohibits scraping.

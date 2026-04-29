@@ -1,0 +1,48 @@
+name: browser-automation
+description: >
+  Automate browser interactions using Playwright or Selenium including
+  form filling, button clicking, screenshot capture, login flows, and
+  end-to-end testing. Use when programmatic HTTP cannot substitute for
+  a real browser (JS-heavy SPAs, captchas, OAuth flows).
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Browser automation workflow (Python + Playwright):
+
+  Install: pip install playwright && playwright install chromium
+
+  Basic pattern:
+    from playwright.sync_api import sync_playwright
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto("https://example.com")
+        page.fill("input[name='email']", "user@example.com")
+        page.click("button[type='submit']")
+        page.wait_for_url("**/dashboard")
+        content = page.content()
+        browser.close()
+
+  Reliable selector strategy (in order of preference):
+    1. page.get_by_role("button", name="Submit")
+    2. page.get_by_label("Email")
+    3. page.get_by_text("Sign in")
+    4. page.locator("css=div.submit-btn")   (last resort)
+
+  Waiting:
+    page.wait_for_load_state("networkidle")  — page fully loaded
+    page.wait_for_selector("div.result")      — specific element appears
+    Never use time.sleep() — use Playwright waits instead
+
+  Screenshots:
+    page.screenshot(path="screenshot.png", full_page=True)
+
+  When to use nav_fetch instead (faster, no browser needed):
+    - Static HTML pages
+    - JSON APIs
+    - No JS rendering required
+
+  Model tier: standard for simple flows; max for complex multi-step automation.

@@ -1,0 +1,40 @@
+name: sql-query
+description: >
+  Write, optimise, or explain SQL queries for any relational database.
+  Use for SELECT queries, JOINs, aggregations, window functions, schema
+  design, index recommendations, and query performance tuning.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  SQL workflow:
+
+  1. Collect context:
+     - Database engine: PostgreSQL / MySQL / SQLite / BigQuery / etc.
+     - Relevant table names and column definitions (ask if not provided)
+     - Desired output columns and filtering conditions
+
+  2. Write the query:
+     - Use explicit column names (never SELECT *)
+     - Qualify ambiguous columns with table alias: t.column_name
+     - Use CTEs (WITH ...) for readability over nested subqueries
+     - Add inline comments for non-obvious logic
+
+  3. Optimise (if asked or if query is complex):
+     - Add WHERE before GROUP BY to filter early
+     - Prefer EXISTS over IN for large subqueries
+     - Suggest indexes: CREATE INDEX ON table (column) WHERE condition;
+     - Partition large tables by date if engine supports it
+
+  4. Format:
+     - Keywords in UPPERCASE
+     - Each clause on its own line
+     - Indent continuation lines 2 spaces
+
+  5. Explain plan (if user asks "why is it slow?"):
+     Prefix with EXPLAIN ANALYZE (PostgreSQL) or EXPLAIN (MySQL/SQLite)
+     and interpret the output.
+
+  Model tier: standard for individual queries; max for complex schema
+  migrations, performance audits, or multi-schema designs.

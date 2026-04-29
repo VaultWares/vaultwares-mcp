@@ -35,8 +35,86 @@ This server fixes all four automatically.
 
 | Tool | Description |
 |---|---|
-| `nav_fetch` | Fetch a single URL via httpx — 30–2 000× faster than browser calls |
+| `nav_fetch` | Fetch a single URL via httpx — 30–2,000× faster than browser calls |
 | `nav_fetch_many` | Fetch up to 20 URLs in parallel — 10 URLs in ~1.3 s vs. 150+ s |
+
+---
+
+## Skill Files (`skills/`)
+
+The `skills/` directory contains **40 Manus-compatible `.skill` files** in valid YAML format.
+Each file can be imported directly into Manus AI via **Settings → Skills → + Add → Upload `.skill` file**
+or pushed to a GitHub repo and imported via **+ Add → Import from GitHub**.
+
+### Credit Optimizer skills
+
+| File | Description |
+|---|---|
+| `credit-optimizer.skill` | Full optimisation pipeline — routing + compression + batch detection |
+| `credit-classify.skill` | Classify prompt intent into one of 12 categories |
+| `credit-recommend.skill` | Recommend cheapest model tier with Quality Veto Rule |
+| `credit-optimize-prompt.skill` | Compress prompts to reduce token cost |
+| `credit-estimate.skill` | Estimate credit cost before execution |
+| `credit-analyze-batch.skill` | Bulk-analyse a list of prompts for optimisation |
+| `llm-context-hygiene.skill` | Detect and remove context bloat from long Manus sessions |
+
+### Fast Navigation skills
+
+| File | Description |
+|---|---|
+| `fast-navigation.skill` | Replace browser tool calls with direct httpx fetching (30–2,000× faster) |
+| `web-scraping.skill` | Extract structured data from web pages |
+| `research.skill` | Parallel multi-source web research |
+| `browser-automation.skill` | Playwright automation for JS-heavy sites |
+
+### Developer tools
+
+| File | Description |
+|---|---|
+| `code-generation.skill` | Write idiomatic code in any language |
+| `code-review.skill` | Security, correctness, and style review |
+| `debugging.skill` | Diagnose and fix bugs from stack traces |
+| `refactoring.skill` | Improve code structure without changing behaviour |
+| `test-generation.skill` | Generate unit and integration tests |
+| `documentation.skill` | Write docstrings, READMEs, and API references |
+| `api-design.skill` | Design REST/GraphQL APIs with OpenAPI spec |
+| `sql-query.skill` | Write and optimise SQL queries |
+| `regex-builder.skill` | Build, test, and explain regular expressions |
+| `performance-profiling.skill` | Identify and fix runtime bottlenecks |
+| `security-audit.skill` | OWASP Top 10 and dependency vulnerability checks |
+| `environment-setup.skill` | Set up Python/Node/Go/Rust dev environments |
+| `git-workflow.skill` | Branching, commits, rebasing, PR prep |
+| `ci-cd-pipeline.skill` | GitHub Actions, GitLab CI, CircleCI configs |
+| `docker-compose.skill` | Dockerfile and docker-compose.yml best practices |
+| `prompt-engineering.skill` | Write and optimise LLM system prompts |
+
+### Data & document processing
+
+| File | Description |
+|---|---|
+| `data-analysis.skill` | Stats, aggregation, and visualisation from CSV/JSON |
+| `csv-processing.skill` | Read, clean, transform, and export CSV files |
+| `pdf-processing.skill` | Extract text and tables from PDFs; merge/split |
+| `image-processing.skill` | Resize, convert, compress, and OCR images |
+| `json-yaml-transformer.skill` | Convert, validate, and transform JSON/YAML |
+| `spreadsheet-formula.skill` | Excel and Google Sheets formula generation |
+| `diagram-generation.skill` | Mermaid/PlantUML diagram generation |
+
+### Writing & communication
+
+| File | Description |
+|---|---|
+| `content-writing.skill` | Blog posts, articles, marketing copy |
+| `translation.skill` | High-fidelity multi-language translation (Chat Mode, $0) |
+| `email-drafting.skill` | Professional emails and cold outreach |
+| `summarisation.skill` | Condense long documents into structured summaries |
+| `markdown-formatting.skill` | Clean, well-structured Markdown output |
+
+### Utilities
+
+| File | Description |
+|---|---|
+| `cron-scheduler.skill` | Generate and explain cron expressions |
 
 ---
 
@@ -171,6 +249,10 @@ fastmcp/
 ├── tools/
 │   ├── credit_optimizer.py # Credit Optimizer logic
 │   └── fast_navigation.py  # Fast Navigation logic
+├── skills/                 # 40 Manus-compatible .skill files (YAML)
+│   ├── credit-optimizer.skill
+│   ├── fast-navigation.skill
+│   └── ... (38 more)
 ├── tests/
 │   └── test_tools.py       # Unit tests
 ├── pyproject.toml

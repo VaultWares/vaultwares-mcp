@@ -1,0 +1,38 @@
+name: debugging
+description: >
+  Diagnose and fix bugs, errors, crashes, and unexpected behaviour in code.
+  Use when a user provides an error message, stack trace, or description of
+  broken behaviour and wants it resolved.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Debugging workflow:
+
+  1. Collect context:
+     - Full error message and stack trace
+     - Minimal reproducible code snippet (ask if not provided)
+     - Runtime, language version, OS if relevant
+
+  2. Identify the root cause:
+     - Read the stack trace bottom-up (innermost frame first)
+     - Identify the exact line that throws
+     - Map the error type to its most common cause:
+         NameError / ReferenceError → undefined variable or import
+         TypeError                  → wrong type passed to function
+         IndexError / KeyError      → collection access out of bounds
+         AttributeError             → method called on wrong type or None
+         ImportError / ModuleNotFoundError → missing dependency
+         SyntaxError                → malformed code structure
+
+  3. Propose the fix:
+     - Show the corrected code diff (before / after)
+     - Explain in one sentence why the fix works
+
+  4. Suggest prevention:
+     - Add type hints / runtime type checks
+     - Add a test case covering the failing path
+
+  Avoid guessing if context is insufficient — ask for the missing info.
+  Use standard mode for simple bugs; max for complex async/concurrency issues.

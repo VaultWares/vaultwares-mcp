@@ -1,0 +1,53 @@
+name: csv-processing
+description: >
+  Read, filter, transform, merge, and export CSV files using Python. Use for
+  data cleaning, deduplication, column reshaping, aggregation, and CSV-to-JSON
+  or CSV-to-Excel conversion tasks.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  CSV processing workflow (Python + pandas):
+
+  Setup:
+    import pandas as pd
+    df = pd.read_csv("file.csv", encoding="utf-8")
+
+  Inspect first:
+    df.head(5)
+    df.dtypes
+    df.isnull().sum()   # null counts per column
+    df.duplicated().sum()  # duplicate row count
+
+  Common operations:
+
+    Filter rows:
+      df = df[df["status"] == "active"]
+      df = df[df["date"] >= "2025-01-01"]
+
+    Select / rename columns:
+      df = df[["col1", "col2"]].rename(columns={"col1": "name"})
+
+    Clean strings:
+      df["name"] = df["name"].str.strip().str.lower()
+
+    Remove duplicates:
+      df = df.drop_duplicates(subset=["email"], keep="last")
+
+    Aggregate:
+      df.groupby("category")["revenue"].sum().reset_index()
+
+    Merge two CSVs:
+      pd.merge(df1, df2, on="id", how="left")
+
+    Export:
+      df.to_csv("output.csv", index=False)
+      df.to_json("output.json", orient="records", indent=2)
+      df.to_excel("output.xlsx", index=False)
+
+  Encoding issues:
+    Try encoding="latin-1" or encoding="cp1252" if utf-8 fails.
+    Detect encoding: import chardet; chardet.detect(open("f","rb").read())
+
+  Model tier: standard for most CSV tasks; max for complex multi-file pipelines.

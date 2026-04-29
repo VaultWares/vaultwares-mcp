@@ -1,0 +1,45 @@
+name: code-review
+description: >
+  Review code for correctness, security, performance, and style. Use when a
+  user submits existing code and wants feedback, suggestions, or a score.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Review checklist (apply in order):
+
+  1. Correctness
+     - Logic errors, off-by-one, null dereference, unhandled exceptions
+     - Race conditions or async/await misuse
+     - Incorrect return types or missing returns
+
+  2. Security
+     - SQL injection, XSS, path traversal, unsafe deserialization
+     - Hardcoded secrets or credentials
+     - Missing input validation or output encoding
+
+  3. Performance
+     - N+1 query patterns
+     - Unnecessary re-computation inside loops
+     - Missing indexes on queried fields
+
+  4. Readability & style
+     - Variable names that obscure intent
+     - Functions doing more than one thing
+     - Duplicate code that should be extracted
+
+  5. Test coverage gaps
+     - Edge cases not covered by existing tests
+
+  Output format:
+    ## Summary
+    One sentence overall assessment.
+
+    ## Issues
+    Each issue as: [SEVERITY] Description → Suggested fix
+
+    Severity levels: CRITICAL | HIGH | MEDIUM | LOW | SUGGESTION
+
+  Model tier: standard for < 200 lines; max for larger files or
+  security-critical reviews.

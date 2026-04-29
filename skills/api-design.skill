@@ -1,0 +1,42 @@
+name: api-design
+description: >
+  Design REST or GraphQL APIs including endpoint definitions, request/response
+  schemas, authentication strategy, error handling, and OpenAPI/Swagger specs.
+  Use for new API design, API review, or documenting existing endpoints.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  API design workflow:
+
+  1. Gather requirements:
+     - Resources and operations (CRUD? Custom actions?)
+     - Auth requirements (none, API key, OAuth2, JWT)
+     - Versioning strategy (/v1/, header, query param)
+     - Response format (JSON:API, plain JSON, custom envelope)
+
+  2. Define resources and endpoints (REST):
+     Follow resource-oriented naming:
+       GET    /resources          → list
+       POST   /resources          → create
+       GET    /resources/{id}     → read
+       PUT    /resources/{id}     → replace
+       PATCH  /resources/{id}     → partial update
+       DELETE /resources/{id}     → delete
+
+  3. Request/Response schema:
+     - Use JSON Schema or TypeScript interfaces to define shapes
+     - Include example values in every field
+
+  4. Error handling standard:
+     All errors return:
+       { "error": { "code": "SNAKE_CASE", "message": "Human-readable" } }
+     HTTP status codes: 400 bad_request, 401 unauthorized,
+     403 forbidden, 404 not_found, 422 validation_error, 500 server_error
+
+  5. OpenAPI spec (if asked):
+     Output valid YAML OpenAPI 3.1 spec.
+
+  Model tier: standard for simple CRUD APIs; max for complex domain models,
+  multi-service designs, or full OpenAPI generation.

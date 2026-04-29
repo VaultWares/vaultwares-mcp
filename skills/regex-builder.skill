@@ -1,0 +1,47 @@
+name: regex-builder
+description: >
+  Build, explain, and test regular expressions for any pattern-matching
+  problem. Use for email validation, log parsing, URL extraction, data
+  cleaning, or any task requiring pattern matching in text.
+
+version: "1.0"
+author: VaultWares
+credit_mode: standard
+
+instructions: |
+  Regex building workflow:
+
+  1. Understand the pattern:
+     - What string format should match?
+     - What should NOT match (counter-examples)?
+     - Which flavour: Python (re), JavaScript, PCRE, POSIX?
+
+  2. Build the regex incrementally:
+     a. Match the simplest case first
+     b. Add groups for captures
+     c. Add anchors (^ $) to prevent partial matches
+     d. Add quantifiers and character classes
+
+  3. Annotate the regex with named groups where useful:
+     Python:  (?P<year>\d{4})
+     JS:      (?<year>\d{4})
+
+  4. Provide a test matrix:
+     | Input           | Match? | Groups          |
+     |----------------|--------|-----------------|
+     | valid example  | ✅     | key: value      |
+     | invalid example| ❌     | —               |
+
+  5. Explain the regex in plain English:
+     Break it down token by token.
+
+  6. Pitfalls to avoid:
+     - Catastrophic backtracking: avoid nested quantifiers (a+)+
+     - Unicode: use re.UNICODE flag for non-ASCII text
+     - Greedy vs. lazy: prefer .+? over .+ for bounded matches
+
+  Common patterns (use as-is or adapt):
+    Email:    ^[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}$
+    URL:      https?://[\w/:%#$&?()~.=+\-]+
+    ISO date: \d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])
+    IPv4:     (?:\d{1,3}\.){3}\d{1,3}

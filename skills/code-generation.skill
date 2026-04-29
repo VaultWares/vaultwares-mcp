@@ -1,0 +1,39 @@
+name: code-generation
+description: >
+  Write clean, well-structured code in any programming language from a natural
+  language description. Use for creating functions, classes, scripts, APIs,
+  CLI tools, or full application scaffolds.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Workflow for code generation tasks:
+
+  1. Clarify requirements if ambiguous:
+     - Target language and runtime version
+     - Input/output contract (types, shapes)
+     - Error handling expectations
+     - Performance or dependency constraints
+
+  2. Select model tier:
+     - Simple utilities (single function, < 50 lines)  → standard
+     - Moderate (class, module, REST endpoint)          → standard
+     - Complex (full app, architecture, multi-file)     → max
+
+  3. Write the code:
+     - Follow language-idiomatic conventions
+     - Add type annotations wherever the language supports them
+     - Include docstrings / JSDoc for public functions
+     - Handle edge cases: empty input, null, overflow
+
+  4. Include a usage example in a comment or docstring.
+
+  5. For Python: prefer stdlib over third-party when equivalent.
+     For JS/TS: prefer native fetch / Web APIs over node-fetch / axios.
+
+  6. Output format: fenced code block with language tag.
+     Example: ```python\n# code here\n```
+
+  Do not add explanatory prose after the code block unless the user
+  explicitly asks for it — keep context window usage lean.

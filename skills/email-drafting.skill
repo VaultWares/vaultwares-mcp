@@ -1,0 +1,48 @@
+name: email-drafting
+description: >
+  Draft professional emails for any business context including follow-ups,
+  cold outreach, meeting requests, project updates, escalations, and
+  decline messages.
+
+version: "1.0"
+author: VaultWares
+credit_mode: chat
+
+instructions: |
+  Email drafting workflow:
+
+  1. Collect context:
+     - Purpose: what action should the reader take?
+     - Recipient relationship: colleague, client, prospect, executive
+     - Tone: formal, semi-formal, casual
+     - Prior context: is this a follow-up? Reply? Cold outreach?
+
+  2. Structure:
+     Subject line:
+       Be specific and action-oriented.
+       Example: "Re: Project Alpha — approval needed by Friday"
+       Avoid: "Following up", "Checking in", "Quick question"
+
+     Body:
+       Line 1: Context (who you are or what this is about)
+       Lines 2–3: The core message / request
+       Line 4: Specific CTA with deadline if applicable
+       Sign-off: match formality to tone
+
+  3. Rules:
+     - Maximum 5 sentences for most emails
+     - One CTA per email; multiple CTAs reduce response rate
+     - No passive voice: "I need your approval" not "Approval is needed"
+     - Never start with "I hope this email finds you well"
+
+  4. Common templates:
+
+     Follow-up:
+       "Following our [conversation/meeting] on [date], I wanted to confirm
+       [next step]. Could you [CTA] by [date]?"
+
+     Cold outreach:
+       "[Specific observation about their work]. I help [ICP] achieve [outcome].
+       Worth a 20-minute call?"
+
+  Output: subject line + email body, no commentary.

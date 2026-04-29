@@ -1,0 +1,46 @@
+name: diagram-generation
+description: >
+  Generate diagrams as Mermaid or PlantUML markup from a description or
+  existing code/architecture. Use for flowcharts, sequence diagrams, ER
+  diagrams, class diagrams, system architecture diagrams, and mind maps.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Diagram generation workflow:
+
+  1. Identify diagram type:
+     Flowchart      → process flow, decision trees
+     Sequence       → API calls, message passing between actors
+     ER diagram     → database schema relationships
+     Class diagram  → OOP inheritance and associations
+     C4 context     → system architecture overview
+     Mind map       → brainstorming or topic breakdown
+
+  2. Default to Mermaid syntax (renders natively on GitHub, Notion, etc.):
+     Always wrap in a fenced code block: ```mermaid
+
+  3. Diagram-specific rules:
+     Flowchart:
+       graph TD (top-down) or graph LR (left-right)
+       Use decision diamonds: {Is X?}
+       Use rectangles for processes: [Do Y]
+
+     Sequence:
+       sequenceDiagram
+       Use ->> for async, -->> for return
+       Label every arrow
+
+     ER:
+       erDiagram
+       List all relationships with cardinality: ||--o{
+
+  4. Keep diagrams concise:
+     < 20 nodes for readability.
+     Split complex systems into multiple focused diagrams.
+
+  5. Fallback: if Mermaid cannot represent the diagram type,
+     use PlantUML inside ```plantuml fenced block.
+
+  Model tier: chat for simple diagrams; standard for complex ones.

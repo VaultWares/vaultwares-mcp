@@ -1,0 +1,58 @@
+name: image-processing
+description: >
+  Resize, crop, convert, compress, and annotate images using Python. Use for
+  batch image processing, thumbnail generation, format conversion, metadata
+  extraction, and image-to-text (OCR) tasks.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Image processing workflow (Python + Pillow):
+
+  Install: pip install Pillow
+
+  Basic operations:
+    from PIL import Image
+
+    img = Image.open("input.jpg")
+
+    # Resize (preserve aspect ratio)
+    img.thumbnail((800, 800))
+
+    # Crop (left, upper, right, lower)
+    img.crop((100, 100, 400, 400))
+
+    # Convert format
+    img.save("output.webp", "WEBP", quality=85)
+
+    # Rotate
+    img.rotate(90, expand=True)
+
+    # Grayscale
+    img.convert("L")
+
+  Batch processing:
+    from pathlib import Path
+    for path in Path("images/").glob("*.jpg"):
+        img = Image.open(path)
+        img.thumbnail((400, 400))
+        img.save(Path("thumbs") / path.name)
+
+  Metadata (EXIF):
+    from PIL.ExifTags import TAGS
+    exif = img._getexif() or {}
+    data = {TAGS.get(k, k): v for k, v in exif.items()}
+
+  OCR (extract text from image):
+    import pytesseract
+    text = pytesseract.image_to_string(img, lang="eng")
+
+  Compress JPEG (reduce file size):
+    img.save("compressed.jpg", "JPEG", quality=70, optimize=True)
+
+  WebP conversion (best quality/size ratio):
+    img.save("image.webp", "WEBP", quality=85, method=6)
+
+  Model tier: standard for most image tasks; max for complex batch pipelines
+  or multi-step workflows.

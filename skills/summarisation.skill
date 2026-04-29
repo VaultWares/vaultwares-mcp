@@ -1,0 +1,49 @@
+name: summarisation
+description: >
+  Summarise long documents, articles, meeting notes, research papers, code
+  files, or any text content into concise, structured summaries. Use when a
+  user needs the key points from a large body of text.
+
+version: "1.0"
+author: VaultWares
+credit_mode: standard
+
+instructions: |
+  Summarisation workflow:
+
+  1. Determine summary type:
+     Executive summary  — 1 paragraph, key decision points only
+     Bullet summary     — 5–10 bullets, ordered by importance
+     Structured summary — sections matching the source structure
+     Abstract           — 150–250 words, academic style
+
+  2. Identify what matters:
+     - Main argument / thesis / decision
+     - Supporting evidence (top 3 only)
+     - Action items or next steps
+     - Caveats or open questions
+
+  3. Compression rules:
+     - Remove examples that illustrate a point already made
+     - Remove repetition and redundant phrasing
+     - Use numbers where present: "revenue grew 47%" not "revenue grew significantly"
+     - Preserve proper nouns, dates, and figures exactly
+
+  4. Long documents (> 10 000 words):
+     Divide into chunks, summarise each, then summarise the summaries.
+     Flag if the document is truncated.
+
+  5. Output format (default — bullet summary):
+     ## Summary
+     [1-sentence TL;DR]
+
+     ## Key Points
+     - [Most important point]
+     - [Second most important]
+     ...
+
+     ## Action Items (if any)
+     - [ ] [Owner]: [task] by [date]
+
+  Credit tier: standard for most content; max for research papers
+  or documents requiring deep domain understanding.

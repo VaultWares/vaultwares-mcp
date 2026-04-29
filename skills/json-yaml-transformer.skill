@@ -1,0 +1,45 @@
+name: json-yaml-transformer
+description: >
+  Convert, validate, format, or transform JSON and YAML data. Use for
+  converting between JSON and YAML, pretty-printing, schema validation,
+  flattening nested structures, or transforming data shapes.
+
+version: "1.0"
+author: VaultWares
+credit_mode: chat
+
+instructions: |
+  JSON/YAML transformation tasks:
+
+  JSON → YAML:
+    - Preserve all types (string, number, boolean, null, array, object)
+    - Use block style (not flow) for readability
+    - Quote strings that look like other YAML types: "true", "123", "null"
+
+  YAML → JSON:
+    - Expand all anchors (&name) and aliases (*name) before converting
+    - Preserve nested structure
+
+  Validation:
+    JSON: check with json.loads(); report line/col of syntax error
+    YAML: check with yaml.safe_load(); report offending line
+
+  Pretty-print:
+    JSON: indent=2, sort_keys=False (preserve insertion order)
+    YAML: default_flow_style=False, allow_unicode=True
+
+  Common transformations:
+    Flatten nested object:
+      {"a": {"b": {"c": 1}}} → {"a.b.c": 1}
+    Unflatten:
+      {"a.b.c": 1} → {"a": {"b": {"c": 1}}}
+    Extract keys:
+      jq-style: .items[].name from an array of objects
+    Merge two objects:
+      Deep merge: nested keys are merged, not overwritten
+
+  Output:
+    Return the transformed data in a fenced code block with language tag.
+    Do not add prose unless the user asks for explanation.
+
+  Credit tier: chat for simple conversions; standard for schema validation.

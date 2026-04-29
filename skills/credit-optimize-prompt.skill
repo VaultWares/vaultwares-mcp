@@ -1,0 +1,34 @@
+name: credit-optimize-prompt
+description: >
+  Compress a user prompt to reduce token costs while fully preserving its
+  meaning and intent. Use before sending any long or verbose prompt to reduce
+  credit consumption without losing output quality.
+
+mcp_server: vaultwares-mcp
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Call `credit_optimize` with the original prompt.
+
+  Optional parameter:
+    max_tokens (default 1500) — approximate token budget for the output
+
+  Response fields:
+    original_length   — character count of the original prompt
+    optimized_prompt  — the compressed version to use
+    optimized_length  — character count after compression
+    reduction_pct     — percentage of characters removed
+
+  What the tool does:
+    - Removes filler phrases: "please", "can you", "could you", "I need you to"
+    - Collapses duplicate whitespace and blank lines
+    - Truncates very long prompts at the last sentence boundary
+    - Skips optimisation if it would change the meaning
+
+  When to apply:
+    - reduction_pct >= 5%  → use the optimized_prompt
+    - reduction_pct < 5%   → original prompt is already concise; use as-is
+
+  Never use the optimized_prompt if it changes the task intent or drops
+  required context (check manually when reduction_pct > 40%).

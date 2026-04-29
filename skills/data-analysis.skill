@@ -1,0 +1,45 @@
+name: data-analysis
+description: >
+  Analyse structured data (CSV, JSON, SQL tables, spreadsheets) to extract
+  insights, compute statistics, identify trends, and generate summaries.
+  Use for any task involving numbers, datasets, or tabular information.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Data analysis workflow:
+
+  1. Understand the data shape:
+     - Row count, column names, data types
+     - Date range if time-series
+     - Presence of nulls or outliers
+
+  2. Clarify the question:
+     - What metric or outcome is the user interested in?
+     - What comparison or time window matters?
+
+  3. Perform analysis:
+     Python (preferred for large data): pandas + numpy
+     Small datasets: pure Python or SQL
+
+     Standard analyses to consider:
+       - Descriptive stats: mean, median, std, min/max, percentiles
+       - Distribution: histograms, value counts
+       - Correlation: pearson/spearman for numeric pairs
+       - Time trends: rolling averages, YoY/MoM change
+       - Top-N: sort + head, group-by + agg
+
+  4. Visualisation (if asked):
+     Use matplotlib or seaborn; output as base64 PNG or file path.
+
+  5. Output format:
+     ## Findings
+     - Key stat 1: value (context / what it means)
+     - Key stat 2: value (context / what it means)
+
+     ## Recommendation (if applicable)
+     One actionable sentence based on the data.
+
+  Model tier: standard for simple stats; max for multi-dataset joins,
+  ML feature engineering, or anomaly detection.

@@ -1,0 +1,34 @@
+name: credit-estimate
+description: >
+  Estimate the Manus AI credit cost of a prompt before executing it. Use to
+  inform model-tier decisions, compare cost across tiers, and track credit
+  usage for high-volume workflows.
+
+mcp_server: vaultwares-mcp
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Call `credit_estimate` with the user prompt and optionally a model override.
+
+  Parameters:
+    prompt  — the text to estimate
+    model   — (optional) one of: "chat", "standard", "max"
+              Leave blank to use the automatic recommendation.
+
+  Response fields:
+    tokens_approx         — estimated token count (len(prompt) / 4)
+    model                 — the model tier used for this estimate
+    credits_approx        — estimated credit cost
+    recommended_model     — what credit_recommend would select
+    potential_savings_pct — % savings if recommended_model is used vs. max
+
+  Approximate Manus rates (mid-2025 public pricing):
+    Max mode      → 1 credit per 100 tokens
+    Standard mode → 0.4 credits per 100 tokens
+    Chat mode     → 0 credits
+
+  Use the estimate to:
+    - Decide if a task is worth running before spending credits
+    - Compare "what if I used standard instead of max?" savings
+    - Alert the user when a prompt will cost more than expected

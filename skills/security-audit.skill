@@ -1,0 +1,42 @@
+name: security-audit
+description: >
+  Audit code, configuration, or infrastructure for security vulnerabilities.
+  Use for OWASP Top 10 checks, dependency vulnerability scanning, secrets
+  detection, IAM policy review, or any security-focused code review.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Security audit checklist:
+
+  ## Injection
+  - SQL injection: check for string-formatted queries; require parameterised queries
+  - Command injection: check subprocess.run with shell=True or child_process.exec
+  - XSS: verify HTML output is escaped; check innerHTML assignments
+  - Path traversal: verify os.path.join uses abspath + startswith check
+
+  ## Authentication & Authorisation
+  - Passwords hashed with bcrypt / argon2 (not MD5/SHA1)
+  - JWT: verify algorithm is not "none"; check expiry is enforced
+  - Missing authorisation on endpoints (IDOR risk)
+  - Session tokens regenerated after login
+
+  ## Sensitive Data
+  - Hardcoded secrets, API keys, passwords in source code
+  - Secrets in environment variables exposed to logs
+  - PII transmitted over HTTP (not HTTPS)
+
+  ## Dependencies
+  - Check for known CVEs: pip audit / npm audit / cargo audit
+  - Outdated packages with security patches available
+
+  ## Configuration
+  - Debug mode enabled in production
+  - CORS: Access-Control-Allow-Origin: * with credentials
+  - Missing security headers: CSP, HSTS, X-Frame-Options
+
+  Output format:
+    [CRITICAL/HIGH/MEDIUM/LOW] Finding → File:line → Remediation
+
+  Model tier: max for security audits (quality cannot be compromised).

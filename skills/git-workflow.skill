@@ -1,0 +1,52 @@
+name: git-workflow
+description: >
+  Assist with Git operations including branching strategy, commit messages,
+  rebasing, conflict resolution, and pull request preparation. Use for any
+  version control task or when setting up a Git workflow for a project.
+
+version: "1.0"
+author: VaultWares
+credit_mode: chat
+
+instructions: |
+  Git workflow assistance:
+
+  Commit message format (Conventional Commits):
+    <type>(<scope>): <summary>
+
+    Types: feat, fix, docs, style, refactor, test, chore, perf, ci
+    Example: feat(auth): add JWT refresh token support
+
+  Branching strategy (GitHub Flow):
+    main            → always deployable
+    feature/<name>  → new features, branch from main
+    fix/<name>      → bug fixes, branch from main
+    release/<v>     → optional, for versioned releases
+
+  Common operations:
+    Undo last commit (keep changes):
+      git reset --soft HEAD~1
+
+    Undo last commit (discard changes):
+      git reset --hard HEAD~1
+
+    Interactive rebase (clean up last N commits):
+      git rebase -i HEAD~N
+
+    Resolve merge conflict:
+      1. git status          → identify conflicted files
+      2. Edit files, remove conflict markers (<<<<, ====, >>>>)
+      3. git add <file>
+      4. git commit
+
+    Sync fork with upstream:
+      git fetch upstream
+      git merge upstream/main
+
+  Pull request checklist:
+    - Branch is up to date with main
+    - All tests pass
+    - Commit history is clean (squash WIP commits)
+    - PR description explains what and why
+
+  Credit tier: chat for single commands; standard for workflow design.

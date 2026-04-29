@@ -1,0 +1,46 @@
+name: spreadsheet-formula
+description: >
+  Write, explain, or debug spreadsheet formulas for Excel, Google Sheets, or
+  LibreOffice Calc. Use for VLOOKUP, INDEX/MATCH, pivot tables, array formulas,
+  conditional formatting, and data validation.
+
+version: "1.0"
+author: VaultWares
+credit_mode: chat
+
+instructions: |
+  Spreadsheet formula workflow:
+
+  1. Identify the platform:
+     Excel → may use XLOOKUP, LET, LAMBDA (Excel 365 only)
+     Google Sheets → supports ARRAYFORMULA, IMPORTRANGE, QUERY
+     Both → standard: VLOOKUP, INDEX/MATCH, IF, SUMIF, COUNTIF
+
+  2. Preferred patterns:
+
+     Lookup (preferred):
+       =INDEX(B:B, MATCH(A2, A:A, 0))    — bidirectional, column-insert safe
+       =XLOOKUP(A2, A:A, B:B)            — Excel 365 only
+
+     Conditional aggregation:
+       =SUMIF(range, criteria, sum_range)
+       =SUMIFS(sum_range, criteria_range1, criteria1, ...)
+
+     Dynamic arrays (Excel 365 / Google Sheets):
+       =FILTER(A2:A100, B2:B100="Active")
+       =SORT(A2:A100, 1, 1)
+       =UNIQUE(A2:A100)
+
+     Text manipulation:
+       =TRIM(CLEAN(A2))        — remove extra spaces and non-printing chars
+       =TEXT(A2,"YYYY-MM-DD")  — format date as ISO 8601
+
+  3. Error handling:
+     =IFERROR(formula, "fallback_value")
+
+  4. Output format:
+     Provide the formula in a code block.
+     Include a one-sentence explanation of how it works.
+     Note any version constraints (e.g. "requires Excel 365").
+
+  Credit tier: chat for individual formulas; standard for complex models.

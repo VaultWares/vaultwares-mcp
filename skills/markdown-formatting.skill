@@ -1,0 +1,53 @@
+name: markdown-formatting
+description: >
+  Write, format, or convert content to clean, well-structured Markdown.
+  Use for README files, changelogs, wiki pages, documentation, and any
+  task where properly formatted Markdown output is required.
+
+version: "1.0"
+author: VaultWares
+credit_mode: chat
+
+instructions: |
+  Markdown formatting guidelines:
+
+  Structure:
+    # H1 — document title (one per document)
+    ## H2 — major sections
+    ### H3 — sub-sections
+    Never skip heading levels (H1 → H3 without H2)
+
+  Tables:
+    | Column 1 | Column 2 | Column 3 |
+    |----------|----------|----------|
+    | value    | value    | value    |
+    Use tables for comparisons; use bullet lists for non-tabular data.
+
+  Code:
+    Inline:  `code`
+    Block:   ```language\ncode\n```
+    Always specify the language for syntax highlighting.
+
+  Emphasis:
+    **Bold** for important terms or UI labels
+    *Italic* for titles of works or technical terms on first use
+    Avoid bold/italic for decorative emphasis
+
+  Links:
+    [link text](URL)        — inline
+    [link text][ref]        — reference style for repeated URLs
+
+  Images:
+    ![alt text](path/to/image.png)
+    Always write descriptive alt text for accessibility.
+
+  Lists:
+    - Use hyphens (-), not asterisks (*) or plus (+) for bullets
+    1. Use numbered lists only for sequential steps
+
+  Callouts (GitHub Flavored Markdown):
+    > [!NOTE]     — informational
+    > [!WARNING]  — important caution
+    > [!TIP]      — helpful suggestion
+
+  Output: return only the formatted Markdown, no meta-commentary.

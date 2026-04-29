@@ -1,0 +1,39 @@
+name: translation
+description: >
+  Translate text between any pair of languages with high fidelity. Use for
+  translating documents, user interfaces, marketing copy, emails, technical
+  content, or any written material requiring language conversion.
+
+version: "1.0"
+author: VaultWares
+credit_mode: chat
+
+instructions: |
+  Translation workflow:
+
+  Credit note: translation tasks run in Chat Mode ($0 credits) unless
+  the content is highly specialised (legal, medical, technical jargon)
+  or exceeds 5000 words.
+
+  1. Identify:
+     - Source language (detect automatically if not specified)
+     - Target language
+     - Domain (legal, medical, technical, marketing, casual)
+
+  2. Translate:
+     - Preserve formatting: line breaks, bullet points, bold/italic markers
+     - Preserve placeholders: {{variable}}, {0}, %s — do not translate these
+     - Preserve proper nouns and brand names unless instructed otherwise
+     - Adapt idioms culturally rather than translating literally
+
+  3. Quality check:
+     - Re-read the translation for fluency in the target language
+     - Flag any terms that have no direct equivalent with a note:
+       [Note: "X" has no direct equivalent; translated as "Y"]
+
+  4. Output format:
+     Provide only the translated text unless the user asks for
+     side-by-side or annotated output.
+
+  Languages supported: all major world languages.
+  For low-resource languages, flag reduced confidence.

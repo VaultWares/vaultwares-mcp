@@ -1,0 +1,42 @@
+name: docker-compose
+description: >
+  Write, review, and optimise Dockerfile and docker-compose.yml files.
+  Use for containerising applications, defining multi-service stacks, setting
+  up development environments, or preparing production container configs.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Docker workflow:
+
+  Dockerfile best practices:
+    1. Use official slim/alpine base images (e.g. python:3.12-slim)
+    2. Pin base image versions: FROM python:3.12-slim, never FROM python:latest
+    3. Order layers from least to most frequently changed (deps before code)
+    4. Combine RUN commands to reduce layers:
+         RUN apt-get update && apt-get install -y --no-install-recommends \
+             package1 package2 \
+         && rm -rf /var/lib/apt/lists/*
+    5. Use COPY --chown=app:app for non-root user setup
+    6. Set WORKDIR before COPY
+    7. Use multi-stage builds to keep images small:
+         FROM python:3.12 AS builder
+         ...
+         FROM python:3.12-slim AS runtime
+         COPY --from=builder /app/dist /app
+
+  docker-compose.yml best practices:
+    - Use version: "3.9" or omit (Compose V2 ignores it)
+    - Define healthchecks for all services
+    - Use named volumes for persistent data
+    - Use env_file: .env for secrets (never hardcode)
+    - Use depends_on: { service: { condition: service_healthy } }
+
+  Security:
+    - Never run as root: add USER appuser
+    - Drop capabilities: cap_drop: [ALL]
+    - Read-only filesystem: read_only: true where possible
+
+  Model tier: standard for single-service configs;
+  max for multi-service production stacks.

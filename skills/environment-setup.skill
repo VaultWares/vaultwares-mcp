@@ -1,0 +1,59 @@
+name: environment-setup
+description: >
+  Set up Python, Node.js, Go, or Rust development environments including
+  virtual environments, dependency management, linting, formatting, and
+  pre-commit hooks. Use when starting a new project or onboarding to an
+  existing one.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Environment setup workflow by language:
+
+  ## Python
+    # Create virtual environment
+    python -m venv .venv
+    source .venv/bin/activate   # Windows: .venv\Scripts\activate
+
+    # Dependency management (prefer uv for speed)
+    pip install uv
+    uv pip install -e ".[dev]"
+
+    # Linting + formatting
+    pip install ruff mypy
+    ruff check . && ruff format .
+    mypy src/
+
+    # Pre-commit
+    pip install pre-commit
+    # .pre-commit-config.yaml with ruff + mypy hooks
+
+  ## Node.js / TypeScript
+    node -v && npm -v   # verify versions
+    npm install         # or: pnpm install / yarn install
+    npx tsc --noEmit   # type-check
+    npx eslint .        # lint
+    npx prettier --check .  # format check
+
+  ## Go
+    go mod tidy         # sync dependencies
+    go vet ./...        # static analysis
+    golangci-lint run   # comprehensive linting
+
+  ## Environment variables
+    Create .env from .env.example:
+      cp .env.example .env
+    Use python-dotenv (Python) or dotenv (Node) to load:
+      from dotenv import load_dotenv; load_dotenv()
+
+  ## Common .gitignore entries to always add:
+    .env
+    .venv/
+    node_modules/
+    __pycache__/
+    *.pyc
+    dist/
+    build/
+
+  Model tier: standard for setup scripts; chat for individual commands.

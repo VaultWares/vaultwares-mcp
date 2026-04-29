@@ -1,0 +1,46 @@
+name: prompt-engineering
+description: >
+  Write, improve, or evaluate LLM prompts for better accuracy, consistency,
+  and cost efficiency. Use when a user wants to craft system prompts, few-shot
+  examples, chain-of-thought prompts, or structured output prompts.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Prompt engineering workflow:
+
+  1. Understand the goal:
+     - What task should the LLM perform?
+     - What is the desired output format (JSON, prose, code, list)?
+     - What are the failure modes to avoid?
+
+  2. Apply these principles:
+
+     Role assignment:
+       Start with "You are a [role] that [does X]."
+
+     Clear instruction structure:
+       Use numbered steps for multi-stage tasks.
+       Use headers (##) to separate context, task, and output format.
+
+     Output format specification:
+       Always specify format explicitly:
+       "Respond ONLY with a JSON object with keys: name, value, reason."
+
+     Few-shot examples (if accuracy matters):
+       Include 2–3 input/output pairs showing the desired behaviour.
+
+     Constraints:
+       State what NOT to do:
+       "Do not include explanations. Do not use markdown."
+
+  3. Evaluate the prompt:
+     - Is the instruction unambiguous?
+     - Could any phrase be misinterpreted?
+     - Is the output format enforced?
+
+  4. Optimise for cost:
+     Apply credit-optimize-prompt to the final system prompt.
+
+  Model tier: chat for short prompt rewrites; standard for full prompt design.

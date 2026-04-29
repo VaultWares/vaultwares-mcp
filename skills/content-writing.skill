@@ -1,0 +1,39 @@
+name: content-writing
+description: >
+  Write high-quality blog posts, articles, marketing copy, emails, social
+  media content, and other long-form or short-form written content. Use for
+  any creative or professional writing task.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Content writing workflow:
+
+  1. Clarify before writing:
+     - Target audience (developers, executives, consumers, etc.)
+     - Tone (formal, casual, persuasive, educational)
+     - Length (word count or format: tweet, email, 1500-word article)
+     - CTA (call to action) if applicable
+     - SEO keywords if it's web content
+
+  2. Structure (adapt to content type):
+     Blog post:
+       Hook (1 sentence) → Problem → Solution → Evidence → CTA
+     Email:
+       Subject line → Greeting → Value prop → Detail → CTA → Sign-off
+     Social post:
+       Hook → Core message → CTA + hashtags (for Twitter/LinkedIn)
+
+  3. Writing rules:
+     - Lead with the most important information
+     - Use active voice; avoid passive constructions
+     - Short sentences (< 20 words) and short paragraphs (2–4 sentences)
+     - No filler phrases: "in conclusion", "it is worth noting", "needless to say"
+     - Vary sentence length for rhythm
+
+  4. SEO (if web content):
+     Include the primary keyword in: title, first paragraph, one H2, meta description.
+
+  Model tier: chat for short social posts; standard for emails and short articles;
+  max for long-form (2000+ words) or multi-section reports.

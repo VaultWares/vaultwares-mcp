@@ -1,0 +1,47 @@
+name: llm-context-hygiene
+description: >
+  Detect and remove context bloat from a Manus AI session to keep token costs
+  linear. Use when a session has been running for many steps and subsequent
+  tasks are becoming slower or more expensive due to accumulated context.
+
+mcp_server: vaultwares-mcp
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Context bloat occurs when:
+    - A session has executed 10+ steps
+    - Earlier tool outputs are still in context but no longer relevant
+    - Token cost for new steps is significantly higher than the first step
+
+  Detection signals:
+    - Response latency increasing per step
+    - Repeated information in consecutive tool outputs
+    - Tool call results from step 1 still visible in step 15
+
+  Mitigation workflow:
+
+  1. Identify removable context:
+     - Intermediate file contents that have been processed
+     - Verbose tool outputs where only the result matters
+     - Redundant explanations of completed steps
+
+  2. Compress remaining context:
+     Call `credit_optimize` on any large text block still in context.
+     Use the optimized_prompt version if reduction_pct >= 10%.
+
+  3. Summarise completed work:
+     Replace the detailed history with a compact status update:
+       "Completed: [task 1], [task 2], [task 3]. Next: [task 4]."
+
+  4. Restart a new session for independent sub-tasks:
+     If two remaining tasks are fully independent, split into separate
+     Manus sessions to start with a clean context window.
+
+  5. Prioritise active context:
+     Keep in context only:
+       - The original user request
+       - The current task's inputs and outputs
+       - Any reference data needed for the next step
+
+  Use this skill proactively at step 10+ of any long Manus session.

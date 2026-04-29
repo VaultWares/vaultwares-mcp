@@ -1,0 +1,35 @@
+name: credit-optimizer
+description: >
+  Automatically optimize every Manus AI task to use the cheapest model that
+  delivers identical quality. Use for any task where you want to reduce credit
+  burn without sacrificing output quality. Applies model routing, chat-mode
+  detection, prompt compression, and batch detection.
+
+mcp_server: vaultwares-mcp
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Before executing any task, run the following optimisation pipeline:
+
+  1. Call `credit_recommend` with the full user prompt.
+     - If model = "chat"      → switch to Chat Mode (zero credits)
+     - If model = "standard"  → ensure Standard mode is active (not Max)
+     - If model = "max"       → proceed with Max mode unchanged
+
+  2. Call `credit_optimize` on the prompt with default max_tokens=1500.
+     Use the returned `optimized_prompt` as the actual prompt to execute.
+     Skip if reduction_pct < 5% (not worth the overhead).
+
+  3. When processing multiple prompts in the same session:
+     Call `credit_analyze_batch` on the full list.
+     Apply the `batching_suggestion` if one is returned.
+
+  Quality Veto Rule (hardcoded):
+  Never apply an optimisation that reduces output quality. If the tool
+  recommends "standard" but the task is complex, upgrade to "max" automatically.
+
+  Savings targets (average):
+    - Simple Q&A / translation / brainstorm  → 100% saved (Chat Mode)
+    - Everyday coding / writing / analysis   → ~60% saved (Standard)
+    - Complex systems / ML / full-stack      → 0% saved (Max required)

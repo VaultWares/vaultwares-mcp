@@ -1,0 +1,32 @@
+name: credit-recommend
+description: >
+  Recommend the cheapest Manus AI model (chat / standard / max) that delivers
+  identical quality for a given prompt. Use before executing any task to avoid
+  overpaying for model capacity that isn't needed.
+
+mcp_server: vaultwares-mcp
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Call `credit_recommend` with the user prompt.
+
+  Response fields:
+    intent                — classified intent category
+    model                 — recommended tier: "chat", "standard", or "max"
+    reason                — human-readable explanation of the recommendation
+    estimated_savings_pct — % savings vs. always using Max mode
+
+  Model tiers:
+    chat      — $0; for simple Q&A, translation, brainstorming
+    standard  — ~60% cheaper than max; for everyday coding, writing, analysis
+    max       — full price; reserved for complex multi-step or production tasks
+
+  Quality Veto Rule:
+    The tool automatically upgrades the recommendation if complexity signals
+    are detected. It will never recommend a tier that degrades output quality.
+
+  Action mapping:
+    "chat"     → activate Chat Mode before sending the prompt
+    "standard" → ensure Standard model is selected (not Max)
+    "max"      → use Max mode; no change needed if already active

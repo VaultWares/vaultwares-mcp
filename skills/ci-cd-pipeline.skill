@@ -1,0 +1,46 @@
+name: ci-cd-pipeline
+description: >
+  Design or write CI/CD pipeline configurations for GitHub Actions, GitLab CI,
+  CircleCI, or similar platforms. Use for automating tests, builds, deployments,
+  linting, and release workflows.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  CI/CD pipeline design workflow:
+
+  1. Identify the platform:
+     - GitHub Actions → .github/workflows/*.yml
+     - GitLab CI      → .gitlab-ci.yml
+     - CircleCI       → .circleci/config.yml
+     - Bitbucket      → bitbucket-pipelines.yml
+
+  2. Standard pipeline stages (in order):
+     lint      → code style and static analysis
+     test      → unit + integration tests
+     build     → compile / package / Docker build
+     scan      → security (SAST, dependency audit)
+     deploy    → staging, then production (with manual approval gate)
+
+  3. GitHub Actions specifics:
+     - Use actions/checkout@v4, actions/setup-python@v5
+     - Cache dependencies: actions/cache@v4
+     - Matrix builds for multiple versions:
+         strategy:
+           matrix:
+             python-version: ["3.10", "3.11", "3.12"]
+     - Use environment: production + required reviewers for prod deploys
+
+  4. Security rules:
+     - Never echo secrets in run: steps
+     - Use ${{ secrets.NAME }} for credentials
+     - Pin third-party actions to a commit SHA, not a mutable tag
+
+  5. Optimise for speed:
+     - Run lint and test in parallel (needs: [])
+     - Cache pip / npm / cargo between runs
+     - Use fail-fast: false for matrix jobs when debugging
+
+  Model tier: standard for simple pipelines; max for multi-environment
+  deployment workflows.

@@ -1,0 +1,47 @@
+name: performance-profiling
+description: >
+  Profile and optimise the runtime performance of Python, JavaScript, or
+  Go code. Use when code is too slow, uses too much memory, or has high CPU
+  usage in production.
+
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Performance profiling workflow:
+
+  1. Identify the bottleneck (before optimising):
+     Python: use cProfile or line_profiler
+       python -m cProfile -o profile.out script.py
+       python -m pstats profile.out → sort cumtime → stats 10
+
+     JavaScript: use console.time / console.timeEnd or Node --prof
+     Go: use pprof → go tool pprof cpu.prof
+
+  2. Common bottleneck patterns and fixes:
+     Slow I/O:
+       → Use async/await or thread pools; batch DB queries
+     N+1 queries:
+       → Use JOIN or prefetch_related instead of per-loop queries
+     Repeated computation:
+       → Cache with @lru_cache (Python) or memoize (JS)
+     Large in-memory collections:
+       → Use generators / streams instead of lists
+     String concatenation in loop:
+       → Use "".join(parts) (Python) or array.push + join (JS)
+     Regex recompilation:
+       → Compile once: pattern = re.compile(...) outside the loop
+
+  3. Memory optimisation (Python):
+     Use __slots__ for classes with many instances
+     Use numpy arrays instead of Python lists for numeric data
+     Profile with memory_profiler: @profile decorator
+
+  4. Report format:
+     ## Hotspots
+     - Function X: Y% of runtime → fix applied
+
+     ## Before / After
+     Benchmark comparison if measurable.
+
+  Model tier: standard for simple optimisations; max for deep profiling.

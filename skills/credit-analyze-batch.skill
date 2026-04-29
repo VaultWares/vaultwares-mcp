@@ -1,0 +1,33 @@
+name: credit-analyze-batch
+description: >
+  Analyse a list of prompts at once and return a consolidated credit
+  optimisation plan. Use when planning to run multiple tasks in a session to
+  identify batching opportunities and per-task model recommendations before
+  spending any credits.
+
+mcp_server: vaultwares-mcp
+version: "1.0"
+author: VaultWares
+
+instructions: |
+  Call `credit_analyze_batch` with a list of up to 50 prompt strings.
+
+  Response fields:
+    total_prompts              — number of prompts analysed
+    total_estimated_savings_pct — average savings % across all prompts
+    batching_suggestion        — if >= 3 prompts share the same intent,
+                                  suggests merging them into one prompt
+    items[]                    — per-prompt breakdown:
+      index                    — position in the input list
+      intent                   — classified category
+      model                    — recommended tier
+      reason                   — why that tier was chosen
+      estimated_savings_pct    — savings for this prompt
+      credits_approx           — estimated credit cost
+
+  Workflow:
+    1. Collect all prompts for the session into a list.
+    2. Call credit_analyze_batch once.
+    3. Apply batching_suggestion if present (merge grouped prompts).
+    4. For each remaining item, apply the recommended model tier.
+    5. Total session savings = total_estimated_savings_pct on average.
