@@ -1,6 +1,8 @@
-# VaultWares FastMCP Server
+# VaultWares MCP (FastMCP Server)
 
 A [FastMCP](https://github.com/prefecthq/fastmcp) server that provides **Credit Optimizer** and **Fast Navigation** skills for [Manus AI](https://manus.im) and any other [Model Context Protocol](https://modelcontextprotocol.io/) compatible client (Claude Desktop, Cursor, Windsurf, VS Code, etc.).
+
+This repo also ships a tiered **"any-machine" utility MCP server** (filesystem, shell sessions, optional SSH, personal ops, and diagnostics).
 
 ---
 
@@ -37,6 +39,50 @@ This server fixes all four automatically.
 |---|---|
 | `nav_fetch` | Fetch a single URL via httpx — 30–2,000× faster than browser calls |
 | `nav_fetch_many` | Fetch up to 20 URLs in parallel — 10 URLs in ~1.3 s vs. 150+ s |
+
+### Tier 1 — Filesystem (scoped to server working directory)
+
+| Tool | Description |
+|---|---|
+| `fs_list` | List files/dirs under the server working directory |
+| `fs_read` | Read a UTF-8 text file (size-capped) |
+| `fs_write` | Write/append a UTF-8 text file (size-capped) |
+| `fs_edit` | Apply simple match/range edits to a file (optional backup) |
+
+### Tier 2 — Shell (persistent sessions)
+
+| Tool | Description |
+|---|---|
+| `sh_session_start` | Start a shell session (powershell or bash) |
+| `sh_run` | Run a command in a session |
+| `sh_session_list` | List sessions |
+| `sh_session_stop` | Stop a session |
+
+### Tier 3 — SSH (optional; disabled by default)
+
+| Tool | Description |
+|---|---|
+| `ssh_run` | Run a remote command via system `ssh` |
+
+Enable with `VAULTWARES_MCP_ENABLE_SSH=1`.
+
+### Tier 4 — Personal ops
+
+| Tool | Description |
+|---|---|
+| `ops_journal_append` | Append a line to a daily journal |
+| `ops_note_append` | Append a line to a topic note |
+| `ops_tasklog_append` | Append a JSONL task log line |
+
+Configure storage with `VAULTWARES_MCP_OPS_DIR` (default: `./.vaultwares_ops` under server CWD).
+
+### Tier 5 — Diagnostics
+
+| Tool | Description |
+|---|---|
+| `diag_status` | Server status/health snapshot |
+| `diag_usage` | Usage counters |
+| `diag_limits` | Rate-limit + size/timeout limits |
 
 ---
 
@@ -146,15 +192,15 @@ uv pip install -e .
 ### stdio transport (Claude Desktop, Cursor, Windsurf, VS Code)
 
 ```bash
+python -m vaultwares_fastmcp
+# or (compat wrapper)
 python server.py
-# or
-python server.py --transport stdio
 ```
 
 ### HTTP transport (Manus AI custom MCP, any browser-based client)
 
 ```bash
-python server.py --transport streamable-http --port 8000
+python -m vaultwares_fastmcp --transport streamable-http --port 8000
 ```
 
 The server will be available at `http://localhost:8000/mcp`.
@@ -205,7 +251,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`
   "mcpServers": {
     "vaultwares-mcp": {
       "command": "python",
-      "args": ["/absolute/path/to/fastmcp/server.py"]
+      "args": ["-m", "vaultwares_fastmcp"]
     }
   }
 }
@@ -224,11 +270,23 @@ Add to your project's `.cursor/mcp.json` (or equivalent):
   "mcpServers": {
     "vaultwares-mcp": {
       "command": "python",
-      "args": ["/absolute/path/to/fastmcp/server.py"]
+      "args": ["-m", "vaultwares_fastmcp"]
     }
   }
 }
 ```
+
+---
+
+## One-command install (auto-wires configs)
+
+This updates common MCP host config files and writes backups first.
+
+```bash
+./install.sh --scope global --transport stdio
+```
+
+Options: `--dry-run`, `--scope global|project`, `--transport stdio|http`, `--enable-ssh`.
 
 ---
 
@@ -246,6 +304,8 @@ pytest tests/ -v
 ```
 fastmcp/
 ├── server.py               # FastMCP server entry point
+├── install.sh              # Cross-client config wiring
+├── vaultwares_fastmcp/      # Tiered server + installer
 ├── tools/
 │   ├── credit_optimizer.py # Credit Optimizer logic
 │   └── fast_navigation.py  # Fast Navigation logic
