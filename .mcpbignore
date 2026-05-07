@@ -1,0 +1,36 @@
+# Local dev / virtualenv
+.venv/
+venv/
+.python-version
+
+# OMX / agent state
+.omx/
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+
+# Tests (not needed for runtime)
+tests/
+
+# VCS + editor
+.git/
+.github/
+.gitignore
+.gitattributes
+.vscode/
+.idea/
+
+# OS cruft + logs
+.DS_Store
+Thumbs.db
+*.log
+
+# Built bundles / artifacts
+*.mcpb

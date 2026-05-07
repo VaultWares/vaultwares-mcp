@@ -1,0 +1,32 @@
+{
+  "manifest_version": "0.3",
+  "name": "vaultwares-fastmcp",
+  "display_name": "VaultWares MCP (FastMCP Server)",
+  "version": "2.0.0",
+  "description": "VaultWares FastMCP server — Credit Optimizer and Fast Navigation skills for Manus AI and other MCP clients",
+  "author": {
+    "name": "VaultWares"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VaultWares/fastmcp.git"
+  },
+  "license": "MIT",
+  "compatibility": {
+    "platforms": ["win32", "darwin"],
+    "runtimes": {
+      "python": ">=3.10"
+    }
+  },
+  "server": {
+    "type": "python",
+    "entry_point": "server.py",
+    "mcp_config": {
+      "command": "python",
+      "args": ["${__dirname}/server.py"],
+      "env": {
+        "MCP_TRANSPORT": "stdio"
+      }
+    }
+  }
+}
