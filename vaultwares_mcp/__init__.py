@@ -1,6 +1,6 @@
-"""VaultWares FastMCP server package.
+"""VaultWares Mcp server package.
 
-This package powers the `VaultWares MCP` FastMCP server and provides a
+This package powers the `VaultWares MCP` Mcp server and provides a
 cross-client installer for wiring the server into common MCP hosts.
 """
 

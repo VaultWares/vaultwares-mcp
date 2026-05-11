@@ -1,4 +1,4 @@
-"""Fast Navigation tools for the VaultWares FastMCP server.
+"""Fast Navigation tools for the VaultWares Mcp server.
 
 Replaces slow browser-based fetching with direct httpx calls, achieving
 30–2 000× speed improvements for read-only web tasks.
@@ -50,7 +50,7 @@ def _cache_set(url: str, content: str) -> None:
 
 _HEADERS = {
     "User-Agent": (
-        "Mozilla/5.0 (compatible; VaultWaresMCP/1.0; +https://github.com/VaultWares/fastmcp)"
+        "Mozilla/5.0 (compatible; VaultWaresMCP/1.0; +https://github.com/VaultWares/vaultwares-mcp)"
     ),
     "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.5",
@@ -121,7 +121,7 @@ def _validate_url(url: str) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# Public functions (called by FastMCP tools)
+# Public functions (called by VaultwaresMCP tools)
 # ---------------------------------------------------------------------------
 
 

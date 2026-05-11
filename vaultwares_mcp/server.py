@@ -1,4 +1,4 @@
-"""VaultWares FastMCP server.
+"""VaultWares Mcp server.
 
 Tiered "any-machine" utilities:
   Tier 1: Filesystem tools (scoped to process working directory)
@@ -17,7 +17,7 @@ import sys
 import time
 from typing import Any
 
-from fastmcp import FastMCP
+from fastmcp import FastMCP as VaultwaresMCP
 
 from tools.credit_optimizer import (
     analyze_batch,
@@ -54,7 +54,7 @@ def _rate_and_count(tool_name: str) -> dict[str, Any] | None:
     return None
 
 
-mcp = FastMCP(
+mcp = VaultwaresMCP(
     name="VaultWares MCP",
     instructions=(
         "VaultWares MCP is a tiered utility server. "
@@ -409,7 +409,7 @@ def diag_limits() -> dict[str, Any]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="VaultWares FastMCP server")
+    parser = argparse.ArgumentParser(description="VaultWares Mcp server")
     parser.add_argument(
         "--transport",
         default=os.environ.get("MCP_TRANSPORT", "stdio"),

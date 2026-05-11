@@ -1,4 +1,4 @@
-"""Credit Optimizer tools for the VaultWares FastMCP server.
+"""Credit Optimizer tools for the VaultWares Mcp server.
 
 Analyzes prompts to route them to the cheapest Manus AI model that still
 delivers identical quality.  Covers four problem categories identified in the

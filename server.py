@@ -1,6 +1,6 @@
 """Compatibility wrapper for the VaultWares MCP server.
 
-Prefer `python -m vaultwares_fastmcp` or the `vaultwares-mcp` entrypoint.
+Prefer `python -m vaultwares_mcp` or the `vaultwares-mcp` entrypoint.
 """
 
 from __future__ import annotations

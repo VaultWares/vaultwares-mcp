@@ -1,6 +1,6 @@
 # VaultWares MCP (vaultwares-mcp Server)
 
-A [vaultwares-mcp](https://github.com/prefecthq/vaultwares-mcp) server that provides **Credit Optimizer** and **Fast Navigation** skills for [Manus AI](https://manus.im) and any other [Model Context Protocol](https://modelcontextprotocol.io/) compatible client (Claude Desktop, Cursor, Windsurf, VS Code, etc.).
+A [vaultwares-mcp](https://github.com/p-potvin/vaultwares-mcp) server that provides **Credit Optimizer** and **Fast Navigation** skills for [Manus AI](https://manus.im) and any other [Model Context Protocol](https://modelcontextprotocol.io/) compatible client (Claude Desktop, Cursor, Windsurf, VS Code, etc.).
 
 This repo also ships a tiered **"any-machine" utility MCP server** (filesystem, shell sessions, optional SSH, personal ops, and diagnostics).
 
@@ -305,7 +305,7 @@ pytest tests/ -v
 vaultwares-mcp/
 ├── server.py               # vaultwares-mcp server entry point
 ├── install.sh              # Cross-client config wiring
-├── vaultwares_vaultwares-mcp/      # Tiered server + installer
+├── vaultwares_mcp/      # Tiered server + installer
 ├── tools/
 │   ├── credit_optimizer.py # Credit Optimizer logic
 │   └── fast_navigation.py  # Fast Navigation logic

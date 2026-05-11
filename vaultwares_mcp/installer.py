@@ -137,7 +137,7 @@ def install(
     python = sys.executable
 
     server_id = "vaultwares-mcp"
-    stdio_value = {"command": python, "args": ["-m", "vaultwares_fastmcp"], "env": {}}
+    stdio_value = {"command": python, "args": ["-m", "vaultwares_mcp"], "env": {}}
     http_value = {"url": "http://127.0.0.1:8000/mcp"}
 
     server_value = http_value if transport == "http" else stdio_value
@@ -162,7 +162,7 @@ def install(
             before = _read_text(t.path)
             block_lines = [
                 f'command = "{python}"',
-                'args = ["-m", "vaultwares_fastmcp"]',
+                'args = ["-m", "vaultwares_mcp"]',
                 "enabled = true",
                 "startup_timeout_sec = 10",
             ]

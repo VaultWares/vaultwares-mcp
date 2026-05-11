@@ -5,10 +5,10 @@ import shutil
 
 import pytest
 
-from vaultwares_fastmcp.fs_tools import PathEscapeError, fs_edit_text, fs_read_text, fs_write_text, resolve_scoped
-from vaultwares_fastmcp.ops_tools import ops_journal_append, ops_note_append, ops_tasklog_append
-from vaultwares_fastmcp.shell_tools import ShellSessionManager
-from vaultwares_fastmcp.ssh_tools import ssh_run
+from vaultwares_mcp.fs_tools import PathEscapeError, fs_edit_text, fs_read_text, fs_write_text, resolve_scoped
+from vaultwares_mcp.ops_tools import ops_journal_append, ops_note_append, ops_tasklog_append
+from vaultwares_mcp.shell_tools import ShellSessionManager
+from vaultwares_mcp.ssh_tools import ssh_run
 
 
 def test_resolve_scoped_denies_absolute(tmp_path):

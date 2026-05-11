@@ -1,1 +1,1 @@
-"""VaultWares FastMCP server package."""
+"""VaultWares mcp server package."""
