@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "vaultwares-fastmcp"
+name = "vaultwares-mcp"
 version = "2.0.0"
-description = "VaultWares FastMCP server — Credit Optimizer and Fast Navigation skills for Manus AI and other MCP clients"
+description = "VaultWares MCP server — Credit Optimizer and Fast Navigation skills for Manus AI and other MCP clients"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -22,10 +22,10 @@ dev = [
 ]
 
 [project.scripts]
-vaultwares-mcp = "vaultwares_fastmcp.server:main"
+vaultwares-mcp = "vaultwares_mcp.server:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["tools", "vaultwares_fastmcp"]
+packages = ["tools", "vaultwares_mcp"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

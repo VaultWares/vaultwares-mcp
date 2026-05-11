@@ -35,6 +35,7 @@ from .ops_tools import ops_journal_append, ops_note_append, ops_tasklog_append
 from .shell_tools import ShellSessionManager
 from .ssh_tools import ssh_run as _ssh_run
 from .usage import UsageTracker
+from .ledger_tools import get_ledger_entries, search_ledger
 
 
 _STARTED_AT = time.time()
@@ -308,6 +309,39 @@ def ops_tasklog(event: str) -> dict[str, Any]:
     if out.get("bytes"):
         usage.add_written_bytes(int(out["bytes"]))
     return out
+
+
+# ---------------------------------------------------------------------------
+# Tier 6: Agent Ledger
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool
+def ledger_get_recent(
+    n: int = 25,
+    project: str | None = None,
+    kind: str | None = None,
+    model: str | None = None,
+    assistant: str | None = None,
+    date: str | None = None
+) -> dict[str, Any]:
+    """
+    Fetch the last N ledger entries with optional filters.
+    Filters: project, kind (code-change, plan, etc.), model, assistant, date (YYYY-MM-DD).
+    """
+    if (blocked := _rate_and_count("ledger_get_recent")) is not None:
+        return blocked
+    return {"entries": get_ledger_entries(n=n, project=project, kind=kind, model=model, assistant=assistant, date=date)}
+
+
+@mcp.tool
+def ledger_search(query: str, n: int = 10) -> dict[str, Any]:
+    """
+    Search through recent ledger entries for a specific query string.
+    """
+    if (blocked := _rate_and_count("ledger_search")) is not None:
+        return blocked
+    return {"results": search_ledger(query=query, n=n)}
 
 
 # ---------------------------------------------------------------------------

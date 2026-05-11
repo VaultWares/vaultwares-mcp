@@ -1,6 +1,6 @@
-# VaultWares MCP (FastMCP Server)
+# VaultWares MCP (vaultwares-mcp Server)
 
-A [FastMCP](https://github.com/prefecthq/fastmcp) server that provides **Credit Optimizer** and **Fast Navigation** skills for [Manus AI](https://manus.im) and any other [Model Context Protocol](https://modelcontextprotocol.io/) compatible client (Claude Desktop, Cursor, Windsurf, VS Code, etc.).
+A [vaultwares-mcp](https://github.com/prefecthq/vaultwares-mcp) server that provides **Credit Optimizer** and **Fast Navigation** skills for [Manus AI](https://manus.im) and any other [Model Context Protocol](https://modelcontextprotocol.io/) compatible client (Claude Desktop, Cursor, Windsurf, VS Code, etc.).
 
 This repo also ships a tiered **"any-machine" utility MCP server** (filesystem, shell sessions, optional SSH, personal ops, and diagnostics).
 
@@ -174,8 +174,8 @@ or pushed to a GitHub repo and imported via **+ Add → Import from GitHub**.
 ### Install from source
 
 ```bash
-git clone https://github.com/VaultWares/fastmcp.git
-cd fastmcp
+git clone https://github.com/VaultWares/vaultwares-mcp.git
+cd vaultwares-mcp
 pip install -e .
 ```
 
@@ -192,7 +192,7 @@ uv pip install -e .
 ### stdio transport (Claude Desktop, Cursor, Windsurf, VS Code)
 
 ```bash
-python -m vaultwares_fastmcp
+python -m vaultwares_vaultwares-mcp
 # or (compat wrapper)
 python server.py
 ```
@@ -200,7 +200,7 @@ python server.py
 ### HTTP transport (Manus AI custom MCP, any browser-based client)
 
 ```bash
-python -m vaultwares_fastmcp --transport streamable-http --port 8000
+python -m vaultwares_vaultwares-mcp --transport streamable-http --port 8000
 ```
 
 The server will be available at `http://localhost:8000/mcp`.
@@ -251,7 +251,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`
   "mcpServers": {
     "vaultwares-mcp": {
       "command": "python",
-      "args": ["-m", "vaultwares_fastmcp"]
+      "args": ["-m", "vaultwares_vaultwares-mcp"]
     }
   }
 }
@@ -270,7 +270,7 @@ Add to your project's `.cursor/mcp.json` (or equivalent):
   "mcpServers": {
     "vaultwares-mcp": {
       "command": "python",
-      "args": ["-m", "vaultwares_fastmcp"]
+      "args": ["-m", "vaultwares_vaultwares-mcp"]
     }
   }
 }
@@ -302,10 +302,10 @@ pytest tests/ -v
 ### Project structure
 
 ```
-fastmcp/
-├── server.py               # FastMCP server entry point
+vaultwares-mcp/
+├── server.py               # vaultwares-mcp server entry point
 ├── install.sh              # Cross-client config wiring
-├── vaultwares_fastmcp/      # Tiered server + installer
+├── vaultwares_vaultwares-mcp/      # Tiered server + installer
 ├── tools/
 │   ├── credit_optimizer.py # Credit Optimizer logic
 │   └── fast_navigation.py  # Fast Navigation logic
