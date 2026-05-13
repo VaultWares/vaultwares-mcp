@@ -2,8 +2,8 @@
   "manifest_version": "0.3",
   "name": "vaultwares_mcp",
   "display_name": "VaultWares MCP (MCP Server)",
-  "version": "2.0.0",
-  "description": "VaultWares MCP server — Credit Optimizer and Fast Navigation skills for Manus AI and other MCP clients",
+  "version": "3.0.0",
+  "description": "VaultWares MCP server — Credit Optimizer and Fast Navigation skills for AI Assistants",
   "author": {
     "name": "VaultWares"
   },
@@ -22,10 +22,11 @@
     "type": "python",
     "entry_point": "server.py",
     "mcp_config": {
-      "command": "python",
+      "command": "${__dirname}/.venv/Scripts/python.exe",
       "args": ["${__dirname}/server.py"],
       "env": {
-        "MCP_TRANSPORT": "stdio"
+        "MCP_TRANSPORT": "stdio",
+        "VAULTWARES_VENV_SITE": "${__dirname}/.venv/Lib/site-packages"
       }
     }
   }

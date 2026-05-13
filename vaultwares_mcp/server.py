@@ -356,7 +356,7 @@ def diag_status() -> dict[str, Any]:
     snap = usage.snapshot()
     return {
         "name": "VaultWares MCP",
-        "version": "2.0.0",
+        "version": "3.0.0",
         "transport": _CURRENT_TRANSPORT,
         "pid": os.getpid(),
         "platform": platform.platform(),
@@ -424,8 +424,8 @@ def main() -> None:
     parser.add_argument(
         "--port",
         type=int,
-        default=int(os.environ.get("MCP_PORT", "8000")),
-        help="Port for HTTP transports (default: 8000)",
+        default=int(os.environ.get("MCP_PORT", "9020")),
+        help="Port for HTTP transports (default: 9020)",
     )
     parser.add_argument(
         "--path",

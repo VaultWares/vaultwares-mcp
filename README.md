@@ -1,6 +1,6 @@
 # VaultWares MCP (vaultwares-mcp Server)
 
-A [vaultwares-mcp](https://github.com/p-potvin/vaultwares-mcp) server that provides **Credit Optimizer** and **Fast Navigation** skills for [Manus AI](https://manus.im) and any other [Model Context Protocol](https://modelcontextprotocol.io/) compatible client (Claude Desktop, Cursor, Windsurf, VS Code, etc.).
+A [vaultwares-mcp](https://github.com/p-potvin/vaultwares-mcp) server that provides **Credit Optimizer** and **Fast Navigation** skills for AI Assistants and any other [Model Context Protocol](https://modelcontextprotocol.io/) compatible host (Claude Desktop, Cursor, Windsurf, VS Code, etc.).
 
 This repo also ships a tiered **"any-machine" utility MCP server** (filesystem, shell sessions, optional SSH, personal ops, and diagnostics).
 
@@ -8,7 +8,7 @@ This repo also ships a tiered **"any-machine" utility MCP server** (filesystem, 
 
 ## Why This Server Exists
 
-Manus AI charges credits per task. Most users waste **30–75%** because of:
+Assistants charge credits per task. Most users waste **30–75%** because of:
 
 | Problem | What happens | Waste |
 |---|---|---|
@@ -192,7 +192,7 @@ uv pip install -e .
 ### stdio transport (Claude Desktop, Cursor, Windsurf, VS Code)
 
 ```bash
-python -m vaultwares_vaultwares-mcp
+python -m vaultwares_mcp
 # or (compat wrapper)
 python server.py
 ```
@@ -200,10 +200,10 @@ python server.py
 ### HTTP transport (Manus AI custom MCP, any browser-based client)
 
 ```bash
-python -m vaultwares_vaultwares-mcp --transport streamable-http --port 8000
+python -m vaultwares_mcp --transport streamable-http --port 9020
 ```
 
-The server will be available at `http://localhost:8000/mcp`.
+The server will be available at `http://localhost:9020/mcp`.
 
 ### Environment variables
 
@@ -211,7 +211,7 @@ The server will be available at `http://localhost:8000/mcp`.
 |---|---|---|
 | `MCP_TRANSPORT` | `stdio` | `stdio`, `sse`, or `streamable-http` |
 | `MCP_HOST` | `0.0.0.0` | Host for HTTP transports |
-| `MCP_PORT` | `8000` | Port for HTTP transports |
+| `MCP_PORT` | `9020` | Port for HTTP transports |
 | `MCP_PATH` | `/mcp` | URL path for HTTP transports |
 
 ---
@@ -219,7 +219,7 @@ The server will be available at `http://localhost:8000/mcp`.
 ## Connecting from Manus AI
 
 1. **Start the server** with HTTP transport (see above).  If you are running it
-   on a remote machine, make sure port 8000 is publicly accessible or use a
+   on a remote machine, make sure port 9020 is publicly accessible or use a
    tunnel such as [ngrok](https://ngrok.com/) / [cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/).
 
 2. **Open Manus** → start a new conversation → click the **+** button next to
@@ -251,7 +251,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`
   "mcpServers": {
     "vaultwares-mcp": {
       "command": "python",
-      "args": ["-m", "vaultwares_vaultwares-mcp"]
+      "args": ["-m", "vaultwares_mcp"]
     }
   }
 }
@@ -270,7 +270,7 @@ Add to your project's `.cursor/mcp.json` (or equivalent):
   "mcpServers": {
     "vaultwares-mcp": {
       "command": "python",
-      "args": ["-m", "vaultwares_vaultwares-mcp"]
+      "args": ["-m", "vaultwares_mcp"]
     }
   }
 }

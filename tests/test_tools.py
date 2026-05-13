@@ -1,4 +1,4 @@
-"""Unit tests for VaultWares FastMCP tools."""
+"""Unit tests for VaultWares MCP tools."""
 
 from __future__ import annotations
 
