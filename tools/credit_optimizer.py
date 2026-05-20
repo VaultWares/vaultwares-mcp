@@ -1,14 +1,19 @@
 """Credit Optimizer tools for the VaultWares Mcp server.
 
-Analyzes prompts to route them to the cheapest Manus AI model that still
-delivers identical quality.  Covers four problem categories identified in the
-Manus Power Stack:
+Analyzes prompts to route them to: 
 
-  1. Wrong model routing  – Simple tasks should run in Standard (or Chat) mode.
-  2. No chat detection    – Pure Q&A / brainstorm tasks cost $0 in Chat Mode.
-  3. Context bloat        – Accumulated tokens grow exponentially; this tool
-                            trims them.
+1. The correct protocols, as defined by VaultWares in the ROUTING routine. This saves a lot of files reading, tools and mcp servers loading and therefore, a lot of usage/context.
+
+2. The least token consuming version of the Assistant that can still deliver quality output. The Assistant must have the capacity to switch model by itself (uncertain), either by directly switching himself or via a subagent instantiated inside a CLI with a low-cost model (this is already doable).
+
+It covers 6 oversights identified in most Assistants main routine:
+
+  1. Wrong model routing  – Simple tasks should run in medium/Medium thinking mode.
+  2. No chat switching    – Pure Q&A / brainstorm tasks cost nothing in normal chat mode.
+  3. Context bloat        – Accumulated tokens grow exponentially; this tool automatically compacts them (already done by some hosts)
   4. Batch detection      – Related tasks grouped together reduce overhead.
+  5. Blind commands       - At one point the assistant might start throwing anything he can at the wall and see if it sticks. Probably because he is under very strict orders to fulfill the user's request and never return empty-handed. We need to teach them that asking questions is welcomed behavior sometimes. It produces higher quality sessions because the user is also forced to put more effort into thinking. It saves running time and tokens. It helps the user to visualize what he really wants. Questions should be an integral part of VaultWares' development unless explicitly stated otherwise.
+  6. Handling 
 """
 
 from __future__ import annotations
@@ -35,7 +40,7 @@ IntentCategory = Literal[
     "mixed",
 ]
 
-ModelRecommendation = Literal["chat", "standard", "max"]
+ModelRecommendation = Literal["medium", "high", "max"]
 
 # Keywords that signal each intent category
 _INTENT_PATTERNS: dict[str, list[str]] = {
@@ -103,18 +108,18 @@ _INTENT_PATTERNS: dict[str, list[str]] = {
 
 # Default model routing per category
 _CATEGORY_MODEL: dict[str, ModelRecommendation] = {
-    "code": "standard",
-    "bug_fix": "standard",
-    "refactor": "standard",
-    "data": "standard",
-    "research": "standard",
+    "code": "medium",
+    "bug_fix": "medium",
+    "refactor": "medium",
+    "data": "medium",
+    "research": "medium",
     "translation": "chat",
-    "creative": "standard",
-    "documentation": "standard",
-    "analysis": "standard",
+    "creative": "medium",
+    "documentation": "medium",
+    "analysis": "medium",
     "brainstorm": "chat",
     "qa": "chat",
-    "mixed": "standard",
+    "mixed": "medium",
 }
 
 # Patterns that signal a task is genuinely complex (→ Max mode)
@@ -196,8 +201,8 @@ def recommend_model(prompt: str) -> dict:
 
     # Upgrade model based on complexity
     if base_model == "chat" and complexity >= 1:
-        base_model = "standard"
-    if base_model == "standard" and complexity >= 2:
+        base_model = "medium"
+    if base_model == "medium" and complexity >= 2:
         base_model = "max"
 
     # Research tasks with exhaustive/comprehensive language → Max
@@ -208,14 +213,14 @@ def recommend_model(prompt: str) -> dict:
                 base_model = "max"
                 break
 
-    savings_map: dict[str, int] = {"chat": 100, "standard": 60, "max": 0}
+    savings_map: dict[str, int] = {"chat": 100, "medium": 60, "max": 0}
     reason_map = {
         "chat": (
             "This task is a simple Q&A / translation / brainstorm that Manus "
             "handles in Chat Mode at zero credit cost."
         ),
-        "standard": (
-            "The task complexity fits the Standard model — identical results at "
+        "medium": (
+            "The task complexity fits the medium model — identical results at "
             "roughly 60% lower cost than Max."
         ),
         "max": (
@@ -309,12 +314,12 @@ def estimate_credits(prompt: str, model: str | None = None) -> dict:
 
     Manus approximate rates:
         Max mode    — ~1 credit per 100 tokens
-        Standard    — ~0.4 credits per 100 tokens
+        medium    — ~0.4 credits per 100 tokens
         Chat Mode   — $0 (no credit deduction)
 
     Args:
         prompt: The prompt text to estimate credits for.
-        model: Override the recommended model ("chat", "standard", "max").
+        model: Override the recommended model ("chat", "medium", "max").
                If omitted, the recommendation from recommend_model() is used.
 
     Returns:
@@ -327,12 +332,12 @@ def estimate_credits(prompt: str, model: str | None = None) -> dict:
     recommended_model: ModelRecommendation = recommendation["model"]
 
     resolved_model: ModelRecommendation
-    if model in ("chat", "standard", "max"):
+    if model in ("chat", "medium", "max"):
         resolved_model = model  # type: ignore[assignment]
     else:
         resolved_model = recommended_model
 
-    rate_per_100: dict[str, float] = {"chat": 0.0, "standard": 0.4, "max": 1.0}
+    rate_per_100: dict[str, float] = {"chat": 0.0, "medium": 0.4, "max": 1.0}
     credits_approx = round(tokens_approx * rate_per_100[resolved_model] / 100, 4)
 
     credits_if_max = round(tokens_approx * rate_per_100["max"] / 100, 4)
