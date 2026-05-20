@@ -27,6 +27,7 @@ from tools.credit_optimizer import (
     recommend_model,
 )
 from tools.fast_navigation import fetch_url, fetch_urls
+from tools.task_estimator import estimate_task
 
 from .config import load_config
 from .fs_tools import PathEscapeError, fs_edit_text, fs_list, fs_read_text, fs_write_text
@@ -121,6 +122,33 @@ def nav_fetch_many(
     if (blocked := _rate_and_count("nav_fetch_many")) is not None:
         return blocked
     return fetch_urls(urls, as_text=as_text, ttl=ttl, max_concurrency=max_concurrency)
+
+@mcp.tool
+def task_estimate(
+    protocols: list[str] | None = None,
+    repos: int = 1,
+    files_read: int = 0,
+    files_changed: int = 0,
+    tools: int = 0,
+    commands: int = 0,
+    include_time_estimates: bool = True,
+) -> dict[str, Any]:
+    """Estimate task size (token-first).
+
+    This is intentionally decoupled from credit optimization.
+    Primary output is estimated_output_tokens; time is derived if requested.
+    """
+    if (blocked := _rate_and_count("task_estimate")) is not None:
+        return blocked
+    return estimate_task(
+        protocols=protocols or [],
+        repos=int(repos),
+        files_read=int(files_read),
+        files_changed=int(files_changed),
+        tools=int(tools),
+        commands=int(commands),
+        include_time_estimates=bool(include_time_estimates),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -445,3 +473,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+

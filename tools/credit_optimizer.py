@@ -13,7 +13,7 @@ It covers 6 oversights identified in most Assistants main routine:
   3. Context bloat        – Accumulated tokens grow exponentially; this tool automatically compacts them (already done by some hosts)
   4. Batch detection      – Related tasks grouped together reduce overhead.
   5. Blind commands       - At one point the assistant might start throwing anything he can at the wall and see if it sticks. Probably because he is under very strict orders to fulfill the user's request and never return empty-handed. We need to teach them that asking questions is welcomed behavior sometimes. It produces higher quality sessions because the user is also forced to put more effort into thinking. It saves running time and tokens. It helps the user to visualize what he really wants. Questions should be an integral part of VaultWares' development unless explicitly stated otherwise.
-  6. Handling 
+  6. Handling long tasks  - Use a token-first estimate (time derived if needed) to decide when to stop and ask questions, batch work, or trigger long-running task protocols.
 """
 
 from __future__ import annotations
@@ -414,3 +414,4 @@ def analyze_batch(prompts: list[str]) -> dict:
         "total_estimated_savings_pct": avg_savings,
         "batching_suggestion": batching_suggestion,
     }
+
