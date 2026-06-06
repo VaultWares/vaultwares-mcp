@@ -40,7 +40,7 @@ IntentCategory = Literal[
     "mixed",
 ]
 
-ModelRecommendation = Literal["medium", "high", "max"]
+ModelRecommendation = Literal["low", "medium", "high", "max"]
 
 # Keywords that signal each intent category
 _INTENT_PATTERNS: dict[str, list[str]] = {
@@ -77,7 +77,7 @@ _INTENT_PATTERNS: dict[str, list[str]] = {
     "translation": [
         r"\btranslate\b",
         r"\b(in|into|to)\b.{1,30}\b(french|spanish|german|portuguese|italian|chinese|japanese|korean|arabic|russian)\b",
-        r"\blocaliz[sz]e\b",
+        r"\blocali[sz]e\b",
     ],
     "creative": [
         r"\b(write|draft|compose)\b.{1,40}\b(blog|article|story|poem|essay|email|newsletter|ad)\b",
@@ -107,18 +107,18 @@ _INTENT_PATTERNS: dict[str, list[str]] = {
 }
 
 # Default model routing per category
-_CATEGORY_MODEL: dict[str, ModelRecommendation] = {
-    "code": "medium",
+_CATEGORY_MODEL: dict[str, str] = {
+    "code":  "medium",
     "bug_fix": "medium",
     "refactor": "medium",
     "data": "medium",
     "research": "medium",
-    "translation": "chat",
+    "translation": "medium",
     "creative": "medium",
     "documentation": "medium",
     "analysis": "medium",
-    "brainstorm": "chat",
-    "qa": "chat",
+    "brainstorm": "medium",
+    "qa": "medium",
     "mixed": "medium",
 }
 
@@ -126,7 +126,7 @@ _CATEGORY_MODEL: dict[str, ModelRecommendation] = {
 # Each pattern counts independently; score ≥ 2 triggers Max mode.
 _COMPLEXITY_SIGNALS: list[str] = [
     r"\b(entire|full|complete)\b.{1,30}\b(app|application|system|platform|architecture)\b",
-    r"\b(multi.?step|multi.?stage|pipeline)\b",
+    r"\b(multi.?step|multi.?agent|multi.?stage|pipeline)\b",
     r"\b(20|30|40|50|\d{3,})\b.{1,20}\b(file|function|class|endpoint|table|feature|service|microservice|module)\b",
     r"\bmicroservice\b",
     r"\bdistributed\b.{0,30}\b(system|architecture|service|platform)\b",
@@ -184,7 +184,7 @@ def classify_intent(prompt: str) -> IntentCategory:
 
 
 def recommend_model(prompt: str) -> dict:
-    """Determine the cheapest Manus AI model that delivers identical quality.
+    """Determine the cheapest  AI model that delivers identical quality.
 
     Applies the Quality Veto Rule: if saving credits would reduce quality,
     the recommendation falls back to a more capable model automatically.
@@ -196,7 +196,7 @@ def recommend_model(prompt: str) -> dict:
         A dict with keys: intent, model, reason, estimated_savings_pct.
     """
     intent = classify_intent(prompt)
-    base_model: ModelRecommendation = _CATEGORY_MODEL[intent]
+    base_model: ModelRecommendation = "medium"  # default for most categories
     complexity = _score_complexity(prompt)
 
     # Upgrade model based on complexity
@@ -216,7 +216,7 @@ def recommend_model(prompt: str) -> dict:
     savings_map: dict[str, int] = {"chat": 100, "medium": 60, "max": 0}
     reason_map = {
         "chat": (
-            "This task is a simple Q&A / translation / brainstorm that Manus "
+            "This task is a simple Q&A / translation / brainstorm that  "
             "handles in Chat Mode at zero credit cost."
         ),
         "medium": (
@@ -237,7 +237,7 @@ def recommend_model(prompt: str) -> dict:
     }
 
 
-def optimize_prompt(prompt: str, max_tokens: int = 1500) -> dict:
+def optimize_prompt(prompt: str, max_tokens: int = 1024) -> dict:
     """Compress a prompt to reduce token costs while preserving meaning.
 
     Applies lightweight heuristics:
@@ -267,12 +267,9 @@ def optimize_prompt(prompt: str, max_tokens: int = 1500) -> dict:
         r"\bcan you\b\s?",
         r"\bwould you\b\s?",
         r"\bI was wondering if\b\s?",
-        r"\bI need you to\b\s?",
-        r"\bI want you to\b\s?",
-        r"\bI would like you to\b\s?",
-        r"\bAs an AI\b.*?\.\s?",
-        r"\bNote that\b.*?\.\s?",
-        r"\bRemember that\b.*?\.\s?",
+        r"\bI need\b\s?",
+        r"\bI want\b\s?",
+        r"\bI would like\b\s?",
     ]
     for phrase in filler_phrases:
         optimized = re.sub(phrase, "", optimized, flags=re.IGNORECASE)
@@ -307,15 +304,10 @@ def optimize_prompt(prompt: str, max_tokens: int = 1500) -> dict:
 
 
 def estimate_credits(prompt: str, model: str | None = None) -> dict:
-    """Estimate the Manus credit cost for executing a given prompt.
+    """Estimate the credit cost for executing a given prompt.
 
-    Uses approximate token counts and Manus credit-per-token rates (as of
+    Uses approximate token counts and credit-per-token rates (as of
     mid-2025 public pricing).  Figures are estimates; actual costs vary.
-
-    Manus approximate rates:
-        Max mode    — ~1 credit per 100 tokens
-        medium    — ~0.4 credits per 100 tokens
-        Chat Mode   — $0 (no credit deduction)
 
     Args:
         prompt: The prompt text to estimate credits for.

@@ -44,10 +44,10 @@ This server fixes all four automatically.
 
 | Tool | Description |
 |---|---|
-| `fs_list` | List files/dirs under the server working directory |
+| `fs_list_dir` | List files/dirs under the server working directory |
 | `fs_read` | Read a UTF-8 text file (size-capped) |
 | `fs_write` | Write/append a UTF-8 text file (size-capped) |
-| `fs_edit` | Apply simple match/range edits to a file (optional backup) |
+| `fs_edit` | Match-and-replace edits to a file (`match`, `replace`, `count` = 0 for all, optional backup) |
 
 ### Tier 2 — Shell (persistent sessions)
 
@@ -70,9 +70,9 @@ Enable with `VAULTWARES_MCP_ENABLE_SSH=1`.
 
 | Tool | Description |
 |---|---|
-| `ops_journal_append` | Append a line to a daily journal |
-| `ops_note_append` | Append a line to a topic note |
-| `ops_tasklog_append` | Append a JSONL task log line |
+| `ops_journal` | Append a line to a daily journal |
+| `ops_note` | Append a line to a topic note |
+| `ops_tasklog` | Append a JSONL task log line |
 
 Configure storage with `VAULTWARES_MCP_OPS_DIR` (default: `./.vaultwares_ops` under server CWD).
 
@@ -83,6 +83,18 @@ Configure storage with `VAULTWARES_MCP_OPS_DIR` (default: `./.vaultwares_ops` un
 | `diag_status` | Server status/health snapshot |
 | `diag_usage` | Usage counters |
 | `diag_limits` | Rate-limit + size/timeout limits |
+
+### Tier 6 — Ledger
+
+| Tool | Description |
+|---|---|
+| `agent_ledger_get_recent` | Fetch recent agent-ledger entries (coding / project work). Filters: `project`, `kind`, `model`, `assistant`, `date` |
+| `agent_ledger_search` | Full-text search across agent-ledger entries (`summary`, `files`, `commands`) |
+| `health_ledger_get_recent` | Fetch recent health-ledger entries (deployments / server health probes). Filters: `service_id`, `run_id`, `ok`, `event_type`, `date` |
+| `health_ledger_search` | Full-text search across health-ledger entries (`service_id`, `url`, `error`, etc.) |
+
+Agent-ledger path: `agent-ledger/events/YYYY/MM/*.json`  
+Health-ledger path: `health-ledger/data/events/YYYY/MM/*.jsonl`
 
 ---
 
@@ -233,7 +245,7 @@ The server will be available at `http://localhost:9020/mcp`.
    | Transport | `HTTP` |
    | Server URL | `http://<your-host>:8000/mcp` |
 
-4. Click **Save**. Manus will fetch the tool list and display all 7 tools.
+4. Click **Save**. Manus will fetch the tool list and display all 27 tools.
 
 5. Use the tools directly in your conversations:
    - *"Use `credit_recommend` to analyse this prompt before running it"*

@@ -36,7 +36,12 @@ from .ops_tools import ops_journal_append, ops_note_append, ops_tasklog_append
 from .shell_tools import ShellSessionManager
 from .ssh_tools import ssh_run as _ssh_run
 from .usage import UsageTracker
-from .ledger_tools import get_ledger_entries, search_ledger
+from .ledger_tools import (
+    get_agent_ledger_entries,
+    search_agent_ledger,
+    get_health_ledger_entries,
+    search_health_ledger,
+)
 
 
 _STARTED_AT = time.time()
@@ -200,14 +205,14 @@ def fs_write(path: str, content: str, create_dirs: bool = True, mode: str = "ove
 
 
 @mcp.tool
-def fs_edit(path: str, edits: list[dict[str, Any]], create_backup: bool = True) -> dict[str, Any]:
+def fs_edit(path: str, match: str, replace: str, count: int = 0, create_backup: bool = True) -> dict[str, Any]:
     if (blocked := _rate_and_count("fs_edit")) is not None:
         return blocked
     try:
         return fs_edit_text(
             cfg.root_dir,
             path=path,
-            edits=edits,
+            edits=[{"match": match, "replace": replace, "count": count}],
             create_backup=bool(create_backup),
             max_bytes=max(cfg.max_read_bytes, cfg.max_write_bytes),
         )
@@ -340,36 +345,60 @@ def ops_tasklog(event: str) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Tier 6: Agent Ledger
+# Tier 6: Ledger (agent-ledger: coding/projects  |  health-ledger: deployments/health)
 # ---------------------------------------------------------------------------
 
 
 @mcp.tool
-def ledger_get_recent(
+def agent_ledger_get_recent(
     n: int = 25,
     project: str | None = None,
     kind: str | None = None,
     model: str | None = None,
     assistant: str | None = None,
-    date: str | None = None
+    date: str | None = None,
 ) -> dict[str, Any]:
     """
-    Fetch the last N ledger entries with optional filters.
+    Fetch the last N agent-ledger entries (coding and project work) with optional filters.
     Filters: project, kind (code-change, plan, etc.), model, assistant, date (YYYY-MM-DD).
     """
-    if (blocked := _rate_and_count("ledger_get_recent")) is not None:
+    if (blocked := _rate_and_count("agent_ledger_get_recent")) is not None:
         return blocked
-    return {"entries": get_ledger_entries(n=n, project=project, kind=kind, model=model, assistant=assistant, date=date)}
+    return {"entries": get_agent_ledger_entries(n=n, project=project, kind=kind, model=model, assistant=assistant, date=date)}
 
 
 @mcp.tool
-def ledger_search(query: str, n: int = 10) -> dict[str, Any]:
-    """
-    Search through recent ledger entries for a specific query string.
-    """
-    if (blocked := _rate_and_count("ledger_search")) is not None:
+def agent_ledger_search(query: str, n: int = 10) -> dict[str, Any]:
+    """Search through recent agent-ledger entries (coding/project work) for a query string."""
+    if (blocked := _rate_and_count("agent_ledger_search")) is not None:
         return blocked
-    return {"results": search_ledger(query=query, n=n)}
+    return {"results": search_agent_ledger(query=query, n=n)}
+
+
+@mcp.tool
+def health_ledger_get_recent(
+    n: int = 25,
+    service_id: str | None = None,
+    run_id: str | None = None,
+    ok: bool | None = None,
+    event_type: str | None = None,
+    date: str | None = None,
+) -> dict[str, Any]:
+    """
+    Fetch the last N health-ledger entries (deployments and server health probes) with optional filters.
+    Filters: service_id, run_id, ok (True/False), event_type (probe_result, etc.), date (YYYY-MM-DD).
+    """
+    if (blocked := _rate_and_count("health_ledger_get_recent")) is not None:
+        return blocked
+    return {"entries": get_health_ledger_entries(n=n, service_id=service_id, run_id=run_id, ok=ok, event_type=event_type, date=date)}
+
+
+@mcp.tool
+def health_ledger_search(query: str, n: int = 10) -> dict[str, Any]:
+    """Search through recent health-ledger entries (deployments/server health) for a query string."""
+    if (blocked := _rate_and_count("health_ledger_search")) is not None:
+        return blocked
+    return {"results": search_health_ledger(query=query, n=n)}
 
 
 # ---------------------------------------------------------------------------
