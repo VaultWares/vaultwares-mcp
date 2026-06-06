@@ -1,4 +1,11 @@
 ﻿# VaultWares — Claude Code pre-instructions (repo stub)
+
+> ⚠ **READ `CRITICAL.md` BEFORE TOUCHING ANY CODE IN THIS REPO.**
+> The shipped `vaultwares_mcp/server.py` currently has an ImportError at
+> module load (hallucinated ledger API). All tools served by this MCP are
+> unreachable until that's fixed. Do not pattern-match on the existing
+> imports — they're the source of the bug.
+
 This file is intentionally short. It routes work to the company protocol TOC.
 Always start at: `C:\Users\Administrator\Desktop\Github Repos\vaultwares-docs\instructions\ROUTER.md`
 Execute the ROUTER routine first (always): scan all protocol categories end-to-end, select relevant categories, then open only the selected summaries in category order.
