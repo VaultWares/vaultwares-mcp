@@ -1,74 +1,60 @@
-# CRITICAL — server is broken
+# CRITICAL — RESOLVED 2026-06-06
 
-**Status as of 2026-06-06:** `vaultwares-mcp` does **not start**. The shipped
-`vaultwares_mcp/server.py` imports four ledger functions that do not exist in
-`vaultwares_mcp/ledger_tools.py`. An earlier agent hallucinated the API,
-wrote tests against the hallucinated names, and shipped the package
-(`vaultwares-mcp-3.0.0.mcpb`) without verifying it could be imported.
+> Kept at the repo root as institutional memory. The bug is fixed; the
+> story is the value. If you're a new agent landing here, read this once,
+> then trust `tests/test_import_smoke.py` to catch the next regression.
 
-**Symptom.** Loading the MCP server returns `ImportError` at module load.
-Every tool the server is supposed to expose — including `ssh_run`,
-`sh_run`, the filesystem tools, the credit / nav tools — is unreachable as
-a result. This is what blocked the Prom-King deploy from being driven over
-SSH on 2026-06-06.
+## Was
 
-## The lie
+`vaultwares_mcp/server.py` imported four ledger functions
+(`get_agent_ledger_entries`, `search_agent_ledger`,
+`get_health_ledger_entries`, `search_health_ledger`) that did not exist
+in `vaultwares_mcp/ledger_tools.py`. Only `get_ledger_entries` (singular)
+was defined. An earlier agent hallucinated the API, wrote tests against
+the hallucinated names, and shipped `vaultwares-mcp-3.0.0.mcpb` without
+ever running `python -c "import vaultwares_mcp.server"`.
 
-`vaultwares_mcp/server.py` (lines 39-43):
+Symptom: ImportError at module load. Every tool the server exposes —
+ssh_run, sh_run, fs_*, credit_*, nav_*, ops_*, ledger_* — unreachable.
+Blocked driving the Prom-King deploy over SSH on 2026-06-06.
 
-```python
-from .ledger_tools import (
-    get_agent_ledger_entries,
-    search_agent_ledger,
-    get_health_ledger_entries,
-    search_health_ledger,
-)
-```
+GitHub: https://github.com/VaultWares/vaultwares-mcp/issues/2
 
-`vaultwares_mcp/ledger_tools.py` defines exactly **one** public function:
-`get_ledger_entries(...)`. No `agent_*`, no `health_*`, no `search_*`.
+## Now
 
-`tests/test_live_server.py` also references the hallucinated names and so
-gives a false sense of coverage — the test file imports successfully only
-because nothing actually exercises the missing symbols at collection time
-(or because a stub silently swallowed the ImportError).
+Fixed in commit (see git log of `vaultwares_mcp/ledger_tools.py`,
+2026-06-06):
 
-## What to do (in priority order)
-
-1. **Decide whether the ledger feature is desired at all.** The
-   `agent-ledger` lives at `C:\Users\Administrator\Desktop\Github Repos\agent-ledger\events\`
-   and is well-defined; the `health-ledger` referenced in the hallucinated
-   API is not currently a separate artifact in the fleet (we have
-   `vaultwares-docs/docs-content/operations/health-ledger.mdx` as a
-   *design*, not a populated store).
-2. **If yes:** rewrite `ledger_tools.py` to export the four functions
-   `server.py` expects (`get_agent_ledger_entries`, `search_agent_ledger`,
-   `get_health_ledger_entries`, `search_health_ledger`). The existing
-   `get_ledger_entries` is the basis for the agent-ledger pair; the
-   health-ledger pair needs to be defined or stubbed against the design doc.
-3. **If no:** remove the four ledger imports from `server.py`, delete
-   the ledger tool registrations (around `server.py:348-400`, "Tier 6:
-   Ledger"), and rewrite the affected tests in `test_live_server.py` to
-   match. Bump the manifest version and rebuild the `.mcpb`.
-4. **In either case:** the integration test must actually `import server`
-   in a fresh process and fail if it can't. Right now nothing catches
-   this kind of regression. Add a smoke test that runs
-   `python -c "import vaultwares_mcp.server"` before any tool exercise.
-5. **Until this is fixed:** keep treating SSH / sh / fs as **unavailable**
-   from any Claude session that connects through this MCP. Sessions that
-   need to drive remote work should ask the operator to enable the path
-   manually (e.g. `VAULTWARES_MCP_ENABLE_SSH=1`, but only after the
-   ImportError is resolved).
+- All four ledger functions implemented. `get_agent_ledger_entries` +
+  `search_agent_ledger` read the existing agent-ledger
+  (`<root>/<year>/<month>/<file>.json`, one file per event, camelCase
+  fields). `get_health_ledger_entries` + `search_health_ledger` read the
+  health-ledger (`<root>/<year>/<month>/<day>.jsonl`, JSONL).
+- Roots are env-overridable: `VW_AGENT_LEDGER_ROOT`,
+  `VW_HEALTH_LEDGER_ROOT`. Defaults point at the Windows workstation paths.
+- Pre-split aliases (`get_ledger_entries`, `search_ledger`) preserved for
+  back-compat.
+- New `tests/test_import_smoke.py`. Runs as a plain script
+  (`python tests/test_import_smoke.py`) or under pytest. Verifies
+  `vaultwares_mcp.server` imports cleanly, the four functions are
+  present and callable, and they return lists without raising on default
+  args. **This is the gate that should have existed.**
 
 ## How this slipped through
 
 - The hallucinated symbols had plausible names that matched the rest of
-  the fleet's vocabulary ("agent-ledger", "health-ledger"), so reviewers
+  the fleet vocabulary ("agent-ledger", "health-ledger"), so reviewers
   reading the diff would assume the implementation existed.
 - The `.mcpb` was built and committed without a "does the server actually
   start" gate.
 - Subsequent agents pattern-matched on the existing import block when
   asked to extend `server.py`, propagating the bad assumption.
 
-Owner: please triage. This file should stay at the repo root until the
-server boots clean and the regression test exists.
+## Going forward
+
+- `tests/test_import_smoke.py` MUST stay in CI's required check set
+  (or any pre-mcpb-build step). It runs in <2s and catches the entire
+  class of "tool added without backing implementation" regression.
+- When adding a new tool tier, add the import smoke first, then the
+  implementation, then the registration in `server.py`. The order is the
+  same one a TDD purist would pick — and for the same reason.
