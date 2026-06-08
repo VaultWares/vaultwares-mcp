@@ -15,8 +15,7 @@ the hallucinated names, and shipped `vaultwares-mcp-3.0.0.mcpb` without
 ever running `python -c "import vaultwares_mcp.server"`.
 
 Symptom: ImportError at module load. Every tool the server exposes —
-ssh_run, sh_run, fs_*, credit_*, nav_*, ops_*, ledger_* — unreachable.
-Blocked driving the Prom-King deploy over SSH on 2026-06-06.
+sh_run, fs_*, credit_*, nav_*, ops_*, ledger_* — unreachable.
 
 GitHub: https://github.com/VaultWares/vaultwares-mcp/issues/2
 

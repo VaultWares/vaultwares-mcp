@@ -13,7 +13,6 @@ class UsageCounters:
     bytes_read: int = 0
     bytes_written: int = 0
     shell_ms_total: int = 0
-    ssh_ms_total: int = 0
 
 
 class UsageTracker:
@@ -38,10 +37,6 @@ class UsageTracker:
         with self._lock:
             self._c.shell_ms_total += int(max(0, n))
 
-    def add_ssh_ms(self, n: int) -> None:
-        with self._lock:
-            self._c.ssh_ms_total += int(max(0, n))
-
     def snapshot(self) -> UsageCounters:
         with self._lock:
             return UsageCounters(
@@ -50,7 +45,6 @@ class UsageTracker:
                 per_tool_counts=dict(self._c.per_tool_counts),
                 bytes_read=self._c.bytes_read,
                 bytes_written=self._c.bytes_written,
-                shell_ms_total=self._c.shell_ms_total,
-                ssh_ms_total=self._c.ssh_ms_total,
+                shell_ms_total=self._c.shell_ms_total
             )
 

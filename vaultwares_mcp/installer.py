@@ -132,7 +132,6 @@ def install(
     dry_run: bool,
     scope: str,
     transport: str,
-    enable_ssh: bool,
 ) -> dict[str, Any]:
     python = sys.executable
 
@@ -141,10 +140,6 @@ def install(
     http_value = {"url": "http://127.0.0.1:9020/mcp"}
 
     server_value = http_value if transport == "http" else stdio_value
-    if enable_ssh:
-        if "env" not in server_value or not isinstance(server_value.get("env"), dict):
-            server_value["env"] = {}
-        server_value["env"]["VAULTWARES_MCP_ENABLE_SSH"] = "1"
 
     results: list[dict[str, Any]] = []
 
@@ -166,8 +161,6 @@ def install(
                 "enabled = true",
                 "startup_timeout_sec = 10",
             ]
-            if enable_ssh:
-                block_lines.insert(2, 'env = { VAULTWARES_MCP_ENABLE_SSH = "1" }')
             after, changed = _patch_toml_add_block(before, f"mcp_servers.{server_id}", block_lines)
             if changed and not dry_run:
                 _backup(t.path)
@@ -196,7 +189,6 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--scope", choices=["global", "project"], default="global")
     parser.add_argument("--transport", choices=["stdio", "http"], default="stdio")
-    parser.add_argument("--enable-ssh", action="store_true")
     args = parser.parse_args(argv)
 
     result = install(
@@ -204,7 +196,6 @@ def main(argv: list[str] | None = None) -> None:
         dry_run=bool(args.dry_run),
         scope=str(args.scope),
         transport=str(args.transport),
-        enable_ssh=bool(args.enable_ssh),
     )
     print(json.dumps(result, indent=2))
 

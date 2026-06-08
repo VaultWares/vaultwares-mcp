@@ -26,8 +26,7 @@
       "args": ["${__dirname}/server.py"],
       "env": {
         "MCP_TRANSPORT": "stdio",
-        "VAULTWARES_VENV_SITE": "${__dirname}/.venv/Lib/site-packages",
-        "VAULTWARES_MCP_ENABLE_SSH": 1
+        "VAULTWARES_VENV_SITE": "${__dirname}/.venv/Lib/site-packages"
       }
     }
   }

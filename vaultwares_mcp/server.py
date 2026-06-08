@@ -3,9 +3,8 @@
 Tiered "any-machine" utilities:
   Tier 1: Filesystem tools (scoped to process working directory)
   Tier 2: Shell execution w/ persistent sessions
-  Tier 3: Optional SSH execution via system `ssh`
-  Tier 4: Personal ops tools (journal/notes/tasklog)
-  Tier 5: Diagnostics + usage + limits
+  Tier 3: Agent and Health Ledgers search tools
+  Tier 4: Diagnstics tools, usage, limits
 """
 
 from __future__ import annotations
@@ -32,9 +31,7 @@ from tools.task_estimator import estimate_task
 from .config import load_config
 from .fs_tools import PathEscapeError, fs_edit_text, fs_list, fs_read_text, fs_write_text
 from .limits import TokenBucket
-from .ops_tools import ops_journal_append, ops_note_append, ops_tasklog_append
 from .shell_tools import ShellSessionManager
-from .ssh_tools import ssh_run as _ssh_run
 from .usage import UsageTracker
 from .ledger_tools import (
     get_agent_ledger_entries,
@@ -279,73 +276,7 @@ def sh_run(
 
 
 # ---------------------------------------------------------------------------
-# Tier 3: SSH (optional)
-# ---------------------------------------------------------------------------
-
-
-@mcp.tool
-def ssh_run(
-    host: str,
-    command: str,
-    user: str = "",
-    port: int = 22,
-    timeout_ms: int = 60000,
-    identity_file: str = "",
-) -> dict[str, Any]:
-    if (blocked := _rate_and_count("ssh_run")) is not None:
-        return blocked
-    if not cfg.enable_ssh:
-        return {"error": "SSH is disabled. Set VAULTWARES_MCP_ENABLE_SSH=1 to enable."}
-    start = time.monotonic()
-    out = _ssh_run(
-        host=host,
-        command=command,
-        user=user or None,
-        port=int(port),
-        timeout_ms=int(timeout_ms),
-        identity_file=identity_file or None,
-    )
-    usage.add_ssh_ms(int((time.monotonic() - start) * 1000))
-    return out
-
-
-# ---------------------------------------------------------------------------
-# Tier 4: Personal ops
-# ---------------------------------------------------------------------------
-
-
-@mcp.tool
-def ops_journal(entry: str, date_prefix: bool = True) -> dict[str, Any]:
-    if (blocked := _rate_and_count("ops_journal_append")) is not None:
-        return blocked
-    out = ops_journal_append(entry, date_prefix=bool(date_prefix))
-    if out.get("bytes"):
-        usage.add_written_bytes(int(out["bytes"]))
-    return out
-
-
-@mcp.tool
-def ops_note(note: str, topic: str = "general") -> dict[str, Any]:
-    if (blocked := _rate_and_count("ops_note_append")) is not None:
-        return blocked
-    out = ops_note_append(note, topic=topic or "general")
-    if out.get("bytes"):
-        usage.add_written_bytes(int(out["bytes"]))
-    return out
-
-
-@mcp.tool
-def ops_tasklog(event: str) -> dict[str, Any]:
-    if (blocked := _rate_and_count("ops_tasklog_append")) is not None:
-        return blocked
-    out = ops_tasklog_append(event)
-    if out.get("bytes"):
-        usage.add_written_bytes(int(out["bytes"]))
-    return out
-
-
-# ---------------------------------------------------------------------------
-# Tier 6: Ledger (agent-ledger: coding/projects  |  health-ledger: deployments/health)
+# Tier 3: Ledger (agent-ledger: coding/projects  |  health-ledger: deployments/health)
 # ---------------------------------------------------------------------------
 
 
@@ -402,7 +333,7 @@ def health_ledger_search(query: str, n: int = 10) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Tier 5: Diagnostics
+# Tier 4: Diagnostics
 # ---------------------------------------------------------------------------
 
 
@@ -413,7 +344,7 @@ def diag_status() -> dict[str, Any]:
     snap = usage.snapshot()
     return {
         "name": "VaultWares MCP",
-        "version": "3.0.0",
+        "version": "3.0.1",
         "transport": _CURRENT_TRANSPORT,
         "pid": os.getpid(),
         "platform": platform.platform(),
@@ -422,9 +353,8 @@ def diag_status() -> dict[str, Any]:
         "enabled_tiers": {
             "tier1_filesystem": True,
             "tier2_shell": True,
-            "tier3_ssh": bool(cfg.enable_ssh),
-            "tier4_ops": True,
-            "tier5_diag": True,
+            "tier3_ledger": True,
+            "tier4_diag": True,
         },
         "uptime_s": int(time.time() - _STARTED_AT),
         "tool_calls_total": snap.tool_calls_total,
@@ -442,7 +372,6 @@ def diag_usage() -> dict[str, Any]:
         "bytes_read": snap.bytes_read,
         "bytes_written": snap.bytes_written,
         "shell_ms_total": snap.shell_ms_total,
-        "ssh_ms_total": snap.ssh_ms_total,
     }
 
 
@@ -458,7 +387,6 @@ def diag_limits() -> dict[str, Any]:
             "max_write_bytes": cfg.max_write_bytes,
             "max_shell_output_bytes": cfg.max_shell_output_bytes,
             "default_shell_timeout_ms": cfg.default_shell_timeout_ms,
-            "ssh_enabled": bool(cfg.enable_ssh),
         },
         "remaining": {"requests_tokens": snap.tokens},
         "reset_in_s": snap.reset_in_s,

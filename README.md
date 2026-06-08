@@ -2,7 +2,7 @@
 
 A [vaultwares-mcp](https://github.com/p-potvin/vaultwares-mcp) server that provides **Credit Optimizer** and **Fast Navigation** skills for AI Assistants and any other [Model Context Protocol](https://modelcontextprotocol.io/) compatible host (Claude Desktop, Cursor, Windsurf, VS Code, etc.).
 
-This repo also ships a tiered **"any-machine" utility MCP server** (filesystem, shell sessions, optional SSH, personal ops, and diagnostics).
+This repo also ships a tiered **"any-machine" utility MCP server** (filesystem, shell sessions, ledger search and diagnostics).
 
 ---
 
@@ -58,33 +58,7 @@ This server fixes all four automatically.
 | `sh_session_list` | List sessions |
 | `sh_session_stop` | Stop a session |
 
-### Tier 3 — SSH (optional; disabled by default)
-
-| Tool | Description |
-|---|---|
-| `ssh_run` | Run a remote command via system `ssh` |
-
-Enable with `VAULTWARES_MCP_ENABLE_SSH=1`.
-
-### Tier 4 — Personal ops
-
-| Tool | Description |
-|---|---|
-| `ops_journal` | Append a line to a daily journal |
-| `ops_note` | Append a line to a topic note |
-| `ops_tasklog` | Append a JSONL task log line |
-
-Configure storage with `VAULTWARES_MCP_OPS_DIR` (default: `./.vaultwares_ops` under server CWD).
-
-### Tier 5 — Diagnostics
-
-| Tool | Description |
-|---|---|
-| `diag_status` | Server status/health snapshot |
-| `diag_usage` | Usage counters |
-| `diag_limits` | Rate-limit + size/timeout limits |
-
-### Tier 6 — Ledger
+### Tier 3 — Ledger
 
 | Tool | Description |
 |---|---|
@@ -95,6 +69,14 @@ Configure storage with `VAULTWARES_MCP_OPS_DIR` (default: `./.vaultwares_ops` un
 
 Agent-ledger path: `agent-ledger/events/YYYY/MM/*.json`  
 Health-ledger path: `health-ledger/data/events/YYYY/MM/*.jsonl`
+
+### Tier 4 — Diagnostics
+
+| Tool | Description |
+|---|---|
+| `diag_status` | Server status/health snapshot |
+| `diag_usage` | Usage counters |
+| `diag_limits` | Rate-limit + size/timeout limits |
 
 ---
 
@@ -298,7 +280,7 @@ This updates common MCP host config files and writes backups first.
 ./install.sh --scope global --transport stdio
 ```
 
-Options: `--dry-run`, `--scope global|project`, `--transport stdio|http`, `--enable-ssh`.
+Options: `--dry-run`, `--scope global|project`, `--transport stdio|http`.
 
 ---
 

@@ -6,9 +6,7 @@ import shutil
 import pytest
 
 from vaultwares_mcp.fs_tools import PathEscapeError, fs_edit_text, fs_read_text, fs_write_text, resolve_scoped
-from vaultwares_mcp.ops_tools import ops_journal_append, ops_note_append, ops_tasklog_append
 from vaultwares_mcp.shell_tools import ShellSessionManager
-from vaultwares_mcp.ssh_tools import ssh_run
 
 
 def test_resolve_scoped_denies_absolute(tmp_path):
@@ -89,22 +87,3 @@ def test_shell_session_lifecycle(tmp_path):
     assert out["exit_code"] in (0, 1, 2, 127) or out["exit_code"] is None  # platform variance
     assert "hi" in (out["stdout"] or out["stderr"])
     assert mgr.stop(sess.session_id) is True
-
-
-def test_ssh_run_missing_binary(monkeypatch):
-    monkeypatch.setattr(shutil, "which", lambda _: None)
-    out = ssh_run("example.com", "echo hi")
-    assert out["exit_code"] is None
-    assert "not found" in out["stderr"].lower()
-
-
-def test_ops_writes(tmp_path, monkeypatch):
-    monkeypatch.setenv("VAULTWARES_MCP_OPS_DIR", str(tmp_path))
-    j = ops_journal_append("hello", date_prefix=True)
-    n = ops_note_append("note", topic="t1")
-    t = ops_tasklog_append("evt")
-    assert j["bytes"] > 0 and n["bytes"] > 0 and t["bytes"] > 0
-    assert os.path.exists(j["path"])
-    assert os.path.exists(n["path"])
-    assert os.path.exists(t["path"])
-

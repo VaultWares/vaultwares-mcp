@@ -8,7 +8,6 @@ from pathlib import Path
 @dataclass(frozen=True)
 class ServerConfig:
     root_dir: Path
-    enable_ssh: bool
     max_read_bytes: int
     max_write_bytes: int
     max_shell_output_bytes: int
@@ -25,7 +24,6 @@ def _env_bool(name: str, default: bool) -> bool:
 
 def load_config() -> ServerConfig:
     root_dir = Path(os.getcwd()).resolve()
-    enable_ssh = _env_bool("VAULTWARES_MCP_ENABLE_SSH", False)
 
     max_read_bytes = int(os.environ.get("VAULTWARES_MCP_MAX_READ_BYTES", str(2 * 1024 * 1024)))
     max_write_bytes = int(os.environ.get("VAULTWARES_MCP_MAX_WRITE_BYTES", str(2 * 1024 * 1024)))
@@ -37,7 +35,6 @@ def load_config() -> ServerConfig:
 
     return ServerConfig(
         root_dir=root_dir,
-        enable_ssh=enable_ssh,
         max_read_bytes=max_read_bytes,
         max_write_bytes=max_write_bytes,
         max_shell_output_bytes=max_shell_output_bytes,

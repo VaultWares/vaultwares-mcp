@@ -189,31 +189,9 @@ async def run_all():
             _skip("sh_run", "sh_session_start failed")
             _skip("sh_session_stop", "sh_session_start failed")
 
+        
         # ------------------------------------------------------------------
-        # Tier 3: SSH (expected disabled)
-        # ------------------------------------------------------------------
-        print("\n[Tier 3: SSH]")
-        r = await call("ssh_run", host="localhost", command="echo test")
-        if isinstance(r, dict) and r.get("error", "").startswith("SSH is disabled"):
-            _ok("ssh_run (disabled)", "correctly reports SSH disabled")
-        else:
-            check("ssh_run", r)
-
-        # ------------------------------------------------------------------
-        # Tier 4: Ops tools
-        # ------------------------------------------------------------------
-        print("\n[Tier 4: Ops]")
-        r = await call("ops_journal", entry="[test_live_server] MCP live test run", date_prefix=True)
-        check("ops_journal", r, must_contain=["bytes"], error_ok=True)
-
-        r = await call("ops_note", note="MCP live test note", topic="test")
-        check("ops_note", r, must_contain=["bytes"], error_ok=True)
-
-        r = await call("ops_tasklog", event="MCP live test event")
-        check("ops_tasklog", r, must_contain=["bytes"], error_ok=True)
-
-        # ------------------------------------------------------------------
-        # Tier 6: Ledger (agent-ledger + health-ledger)
+        # Tier 3: Ledger (agent-ledger + health-ledger)
         # ------------------------------------------------------------------
         print("\n[Tier 6: Ledger]")
         r = await call("agent_ledger_get_recent", n=5)
@@ -228,6 +206,10 @@ async def run_all():
         r = await call("health_ledger_search", query="vaultwares", n=5)
         check("health_ledger_search", r, must_contain=["results"])
 
+    # ---------------------------------------------------------------------------
+    # Tier 4: Diagnostics
+    # ---------------------------------------------------------------------------
+    # TODO
 
 def main():
     print(f"=== VaultWares MCP Live Test Suite ===")
