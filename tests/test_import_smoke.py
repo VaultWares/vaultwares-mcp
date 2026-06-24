@@ -22,6 +22,14 @@ REQUIRED_LEDGER_FUNCTIONS = (
     "search_health_ledger",
 )
 
+REQUIRED_CLI_TOOLS = (
+    "run_agent_ledger_record_change",
+    "run_agent_ledger_render_ledger",
+    "run_agent_ledger_render_impact",
+    "run_agent_ledger_sync_ledger",
+    "run_health_ledger_probe",
+)
+
 
 def test_server_module_imports() -> None:
     mod = importlib.import_module("vaultwares_mcp.server")
@@ -50,9 +58,16 @@ def test_ledger_tools_return_shape() -> None:
     assert isinstance(lt.search_health_ledger("vaultwares", n=1), list)
 
 
+def test_cli_tools_exports_all_functions() -> None:
+    ct = importlib.import_module("vaultwares_mcp.vw_cli_tools")
+    for fn_name in REQUIRED_CLI_TOOLS:
+        assert hasattr(ct, fn_name), f"vaultwares_mcp.vw_cli_tools.{fn_name} missing"
+        assert callable(getattr(ct, fn_name)), f"{fn_name} is not callable"
+
+
 if __name__ == "__main__":  # bare-script invocation
     failures: list[str] = []
-    for name in ("test_server_module_imports", "test_ledger_tools_exports_all_functions", "test_ledger_tools_return_shape"):
+    for name in ("test_server_module_imports", "test_ledger_tools_exports_all_functions", "test_ledger_tools_return_shape", "test_cli_tools_exports_all_functions"):
         try:
             globals()[name]()
             print(f"  OK  {name}")

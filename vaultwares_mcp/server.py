@@ -39,6 +39,13 @@ from .ledger_tools import (
     get_health_ledger_entries,
     search_health_ledger,
 )
+from .vw_cli_tools import (
+    run_agent_ledger_record_change,
+    run_agent_ledger_render_ledger,
+    run_agent_ledger_render_impact,
+    run_agent_ledger_sync_ledger,
+    run_health_ledger_probe,
+)
 
 
 _STARTED_AT = time.time()
@@ -330,6 +337,61 @@ def health_ledger_search(query: str, n: int = 10) -> dict[str, Any]:
     if (blocked := _rate_and_count("health_ledger_search")) is not None:
         return blocked
     return {"results": search_health_ledger(query=query, n=n)}
+
+
+@mcp.tool
+def agent_ledger_record_change(
+    project: str,
+    summary: str,
+    kind: str = "general",
+    commands: list[str] | None = None,
+    files: list[str] | None = None,
+    plan_path: str | None = None,
+    actor: str | None = None,
+    agent_role: str = "subagent",
+    model: str | None = None,
+    thinking: str = "medium",
+    mode: str = "code",
+    permissions: str = "ask",
+    network: str | None = None,
+    tools_used: list[str] | None = None,
+) -> dict[str, Any]:
+    """Execute the record-agent-change.ps1 script."""
+    if (blocked := _rate_and_count("agent_ledger_record_change")) is not None:
+        return blocked
+    return run_agent_ledger_record_change(project, summary, kind, commands, files, plan_path, actor, agent_role, model, thinking, mode, permissions, network, tools_used)
+
+
+@mcp.tool
+def agent_ledger_render_ledger() -> dict[str, Any]:
+    """Execute the render-agent-ledger.ps1 script."""
+    if (blocked := _rate_and_count("agent_ledger_render_ledger")) is not None:
+        return blocked
+    return run_agent_ledger_render_ledger()
+
+
+@mcp.tool
+def agent_ledger_render_impact() -> dict[str, Any]:
+    """Execute the render-work-impact.ps1 script."""
+    if (blocked := _rate_and_count("agent_ledger_render_impact")) is not None:
+        return blocked
+    return run_agent_ledger_render_impact()
+
+
+@mcp.tool
+def agent_ledger_sync_ledger(commit_message: str | None = None) -> dict[str, Any]:
+    """Execute the sync-agent-ledger.ps1 script."""
+    if (blocked := _rate_and_count("agent_ledger_sync_ledger")) is not None:
+        return blocked
+    return run_agent_ledger_sync_ledger(commit_message)
+
+
+@mcp.tool
+def health_ledger_run_probe(services: list[str] | None = None, no_tailnet: bool = False) -> dict[str, Any]:
+    """Run the Node-based health-ledger probe once."""
+    if (blocked := _rate_and_count("health_ledger_run_probe")) is not None:
+        return blocked
+    return run_health_ledger_probe(services, no_tailnet)
 
 
 # ---------------------------------------------------------------------------

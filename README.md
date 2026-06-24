@@ -64,8 +64,13 @@ This server fixes all four automatically.
 |---|---|
 | `agent_ledger_get_recent` | Fetch recent agent-ledger entries (coding / project work). Filters: `project`, `kind`, `model`, `assistant`, `date` |
 | `agent_ledger_search` | Full-text search across agent-ledger entries (`summary`, `files`, `commands`) |
+| `agent_ledger_record_change` | Record a new agent activity to the ledger (`project`, `summary`, `commands`, `files`, etc.) |
+| `agent_ledger_render_ledger` | Regenerate the static HTML/MD ledger site |
+| `agent_ledger_render_impact` | Recalculate AI impact score and development metrics |
+| `agent_ledger_sync_ledger` | Sync (pull/push) agent-ledger records with GitHub/DB |
 | `health_ledger_get_recent` | Fetch recent health-ledger entries (deployments / server health probes). Filters: `service_id`, `run_id`, `ok`, `event_type`, `date` |
 | `health_ledger_search` | Full-text search across health-ledger entries (`service_id`, `url`, `error`, etc.) |
+| `health_ledger_run_probe` | Force an immediate run of the Node.js health probe (`services`, `no_tailnet`) |
 
 Agent-ledger path: `agent-ledger/events/YYYY/MM/*.json`  
 Health-ledger path: `health-ledger/data/events/YYYY/MM/*.jsonl`
