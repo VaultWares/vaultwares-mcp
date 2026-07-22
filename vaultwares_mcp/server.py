@@ -45,6 +45,10 @@ from .vw_cli_tools import (
     run_agent_ledger_render_impact,
     run_agent_ledger_sync_ledger,
     run_health_ledger_probe,
+    run_vw_sync_instructions,
+    run_vw_sync_skills,
+    run_vw_validate_protocols,
+    run_vw_test_alarm,
 )
 
 
@@ -392,6 +396,38 @@ def health_ledger_run_probe(services: list[str] | None = None, no_tailnet: bool 
     if (blocked := _rate_and_count("health_ledger_run_probe")) is not None:
         return blocked
     return run_health_ledger_probe(services, no_tailnet)
+
+
+@mcp.tool
+def vw_sync_instructions(dry_run: bool = False) -> dict[str, Any]:
+    """Propagate AGENTS.md global system prompts to all AI assistant config files (Claude Code, VS Code, Windsurf, Gemini, Codex, OpenCode, Claude Desktop, Mistral)."""
+    if (blocked := _rate_and_count("vw_sync_instructions")) is not None:
+        return blocked
+    return run_vw_sync_instructions(dry_run=dry_run)
+
+
+@mcp.tool
+def vw_sync_skills(skill_name: str | None = None, dry_run: bool = False) -> dict[str, Any]:
+    """Sync SKILL.md files from the skills directory to all AI assistant skill locations using per-host adapters."""
+    if (blocked := _rate_and_count("vw_sync_skills")) is not None:
+        return blocked
+    return run_vw_sync_skills(skill_name=skill_name, dry_run=dry_run)
+
+
+@mcp.tool
+def vw_validate_protocols() -> dict[str, Any]:
+    """Validate that all chapter files referenced by ROUTER.md exist and the docs mirror index.mdx is present."""
+    if (blocked := _rate_and_count("vw_validate_protocols")) is not None:
+        return blocked
+    return run_vw_validate_protocols()
+
+
+@mcp.tool
+def vw_test_alarm() -> dict[str, Any]:
+    """Send a synthetic alert through every configured channel (SMTP, etc.) to verify alert wiring."""
+    if (blocked := _rate_and_count("vw_test_alarm")) is not None:
+        return blocked
+    return run_vw_test_alarm()
 
 
 # ---------------------------------------------------------------------------
