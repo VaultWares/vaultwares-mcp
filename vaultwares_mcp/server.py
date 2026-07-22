@@ -442,7 +442,7 @@ def diag_status() -> dict[str, Any]:
     snap = usage.snapshot()
     return {
         "name": "VaultWares MCP",
-        "version": "3.0.1",
+        "version": "3.1.0",
         "transport": _CURRENT_TRANSPORT,
         "pid": os.getpid(),
         "platform": platform.platform(),
