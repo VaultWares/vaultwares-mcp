@@ -150,9 +150,24 @@ def run_agent_ledger_sync_ledger(commit_message: str | None = None) -> dict[str,
 
 
 def _get_vw_cli_root() -> str:
-    """Resolve the vw-cli scripts directory."""
+    """Resolve the vw CLI scripts directory.
+
+    The CLI lives in the vault-commander repo (cli/); it was previously a
+    standalone checkout at Desktop\\vw-cli, which is kept as a last-resort
+    fallback so an old machine still works.
+    """
     if os.name == "nt":
-        return os.environ.get("VW_CLI_ROOT", r"C:\Users\Administrator\Desktop\vw-cli")
+        override = os.environ.get("VW_CLI_ROOT")
+        if override:
+            return override
+        candidates = [
+            r"C:\Users\Administrator\Desktop\Github Repos\vault-commander\cli",
+            r"C:\Users\Administrator\Desktop\vw-cli",
+        ]
+        for candidate in candidates:
+            if os.path.isfile(os.path.join(candidate, "vw-commands.ps1")):
+                return candidate
+        return candidates[0]
     return os.environ.get("VW_CLI_ROOT", "/opt/vaultwares-mcp/vw-cli")
 
 
